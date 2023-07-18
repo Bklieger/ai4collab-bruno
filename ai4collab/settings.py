@@ -9,11 +9,13 @@ Environmental Variables:
     - DEBUG: A boolean value for whether or not to run in debug mode.
     - ALLOWED_HOSTS: A list of strings representing the allowed hosts.
         [Environment variable in: development, production]
+    - PSQL_DATABASE_URL: A string representing the database URL.
+        [Environment variable in: development, production]
 
 Requirements for each deployment environment:
     Local: None required. DEPLOYMENT recommended.
-    Development: DEPLOYMENT, ALLOWED_HOSTS required.
-    Production: DEPLOYMENT, SECRET_KEY, ALLOWED_HOSTS required.
+    Development: DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS required.
+    Production: DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS required.
 
 """
 
