@@ -52,7 +52,8 @@ The default is 'local' if the DEPLOYMENT environment variable is not set.
 
 Options:
     - local: For local development with debugging.
-    - development: Tests code in conditions near identical to production.
+    - development: Tests code in conditions near identical to production. 
+        Everything is identical to production except what is required to host locally.
     - production: Production environment for beta testing and release.
 """
 
@@ -126,6 +127,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'audio',
 ]
 
 MIDDLEWARE = [
