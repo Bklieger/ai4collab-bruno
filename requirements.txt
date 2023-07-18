@@ -4,3 +4,4 @@ whitenoise==6.2.0
 djangorestframework==3.14.0
 django-cors-headers==3.13.0
 deepgram-sdk==2.8.0
+dj-database-url==2.0.0

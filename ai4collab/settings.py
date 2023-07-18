@@ -26,6 +26,9 @@ import os
 import warnings
 import inspect
 
+# Import dj_database_url for database configuration.
+import dj_database_url
+
 # Import functions from the global_utils.py file.
 from .global_utils import green_success, yellow_warning, red_critical
 
@@ -80,16 +83,16 @@ deployment environment and the environmental variables.
 
 Requirements:
     - SECRET_KEY: A secret key for the Django project. 
-        [Environment variable in: production]
+        [Environment variable in: development, production]
     - DEBUG: A boolean value for whether or not to run in debug mode.
     - ALLOWED_HOSTS: A list of strings representing the allowed hosts. 
         [Environment variable in: development, production]
 """
 
 # Set the secret key.
-if DEPLOYMENT == 'local' or DEPLOYMENT == 'development':
+if DEPLOYMENT == 'local':
     SECRET_KEY = 'django-insecure-davc%f$&u#j!+l_ebeoqd+h^xtz##u)ijf(0yb_ugv^6jh^!t$'
-else: # Staging and production
+else: # Development and production
     SECRET_KEY = os.environ.get('SECRET_KEY')
     # Check if valid
     if SECRET_KEY == None or len(SECRET_KEY) < 50: # if invalid
@@ -116,7 +119,37 @@ else: # Development, staging, and production
         critical_warnings_exist = True
 
 
-# ------------- [Application Settings] -------------
+"""
+Set the database based upon the deployment environment and 
+the environmental variables.
+
+Requirements:
+    - DATABASES: Local SQLite3 or Database url for the postgresql database.
+        [Environment variable in: development, production]
+"""
+
+
+# Database
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+
+if DEPLOYMENT == 'local':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': str(BASE_DIR / 'db.sqlite3'),
+        }
+    }
+
+#Note: currently using one database. In future when add staging and/or development servers, this can be expanded to have seperate DBs.
+elif DEPLOYMENT == 'development' or DEPLOYMENT == 'production':
+    #connect to postgresql database from environment variables
+    DATABASES = {
+        'default': dj_database_url.config(default=os.getenv('PSQL_DATABASE_URL'))
+    }  
+
+
+
+# ------------- [Other Application Settings] -------------
 
 # Application definition
 
@@ -162,15 +195,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ai4collab.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
-    }
-}
 
 
 # Password validation
@@ -227,9 +252,9 @@ print(running_deployment_transcript)
 
 # Print the results of the settings.py deployment.
 if critical_warnings_exist:
-    print(red_critical('Critical warnings exist. Please fix before deploying.'))
+    print(red_critical(f'Critical warnings exist. Please fix before deploying. ({DEPLOYMENT} deployment)'))
 else:
-    print(green_success('No errors found in settings.py deployment.'))
+    print(green_success(f'No errors found in settings.py {DEPLOYMENT} deployment.'))
 print("\n")
 
 # ------------- [End of File] -------------
