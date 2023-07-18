@@ -27,8 +27,7 @@ docker build -t ai4collab:latest .
 ~~~
 docker run --env-file {DEPLOYMENT}.env -p 8000:8000 ai4collab:latest
 ~~~
-DEPLOYMENT = local, development, or production
-Run with -d for detached
+DEPLOYMENT = local, development, or production. Run with -d for detached.
 
 
 # Instructions without Docker
