@@ -4,7 +4,7 @@ FROM python:3.8-slim
 # Install system dependencies and clean up in a single RUN command
 RUN apt-get update && \
     #TODO: add postgresql libpq-dev later if needed
-    apt-get install -y  gcc && \ 
+    apt-get install -y  gcc postgresql libpq-dev && \ 
     rm -rf /var/lib/apt/lists/* && \
     # Set up the Python virtual environment
     python -m venv /opt/venv && \
