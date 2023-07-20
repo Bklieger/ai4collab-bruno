@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="m-8">
+    <h1>Deployment Status</h1>
+
+    {% if critical_warnings_exist %}
+    <div class="bg-red-500 text-white p-4">
+        <p>Warning: Critical warnings exist!</p>
+    </div>
+    {% else %}
+    <div class="bg-green-500 text-white p-4">
+        <p>Settings.py build successful, no critical warnings.</p>
+    </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <p>{{ running_deployment_transcript }}</p>
+    </div>
+</body>
+</html>

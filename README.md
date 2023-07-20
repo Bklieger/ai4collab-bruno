@@ -47,7 +47,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ~~~
 
-### Set environmental variables
+### Set Environment variables
 ~~~
 touch {DEPLOYMENT}.env
 ~~~
@@ -79,14 +79,14 @@ python manage.py collectstatic
 python manage.py createsuperuser
 ~~~
 
-### Run server without Gunicorn
+### Run server with Uvicorn
 ~~~
-python manage.py runserver
+uvicorn ai4collab.asgi:application
 ~~~
 
-### Alternative: Run server with Gunicorn
+### Run server with Gunicorn running Uvicorn Workers
 ~~~
-gunicorn --bind 0.0.0.0:8000 --workers 4 ai4collab.wsgi
+gunicorn --bind 0.0.0.0:8000 --workers 4 -k uvicorn.workers.UvicornWorker ai4collab.asgi:application
 ~~~
 
 The application is now up and running!

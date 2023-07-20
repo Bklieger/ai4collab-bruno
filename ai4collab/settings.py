@@ -1,7 +1,9 @@
 """
 Django settings for ai4collab project.
 
-Environmental Variables:
+Environment Variables:
+    - DJANGO_SETTINGS_MODULE: Required for running, always "ai4collab.settings"
+        [Environment variable in: local, development, production (all)]
     - DEPLOYMENT: A string representing the deployment environment.
         [Options: local, development, production]
     - SECRET_KEY: A secret key for the Django project.
@@ -11,11 +13,43 @@ Environmental Variables:
         [Environment variable in: development, production]
     - PSQL_DATABASE_URL: A string representing the database URL.
         [Environment variable in: development, production]
+    - DEEPGRAM_API_KEY: A string representing the Deepgram API key.
+        [Environment variable in: local, development, production]
+    - MIDDLESIGHT_API_KEY: A string representing the Middlesight API key.
+        [Environment variable in: local, development, production]
 
 Requirements for each deployment environment:
-    Local: None required. DEPLOYMENT recommended.
-    Development: DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS required.
-    Production: DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS required.
+    Local: DJANGO_SETTINGS_MODULE, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required. DEPLOYMENT recommended.
+    Development: DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
+    Production: DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
+
+------- [local.env] --------
+DEPLOYMENT="local"
+DJANGO_SETTINGS_MODULE=ai4collab.settings
+DEEPGRAM_API_KEY="<add here>"
+MIDDLESIGHT_API_KEY="<add here>"
+
+------- [development.env] --------
+DEPLOYMENT="development"
+DJANGO_SETTINGS_MODULE=ai4collab.settings
+SECRET_KEY="<add here>"
+PSQL_DATABASE_URL="<add here>"
+ALLOWED_HOSTS="<add here>"
+DEEPGRAM_API_KEY="<add here>"
+MIDDLESIGHT_API_KEY="<add here>"
+
+------- [production.env] --------
+DEPLOYMENT="production"
+DJANGO_SETTINGS_MODULE=ai4collab.settings
+SECRET_KEY="<add here>"
+PSQL_DATABASE_URL="<add here>"
+ALLOWED_HOSTS="<add here>"
+DEEPGRAM_API_KEY="<add here>"
+MIDDLESIGHT_API_KEY="<add here>"
+
+------- [instructions] -------
+1. Create and fill env file
+2. RUN export $(cat {deployment}.env | xargs)
 
 """
 
@@ -48,8 +82,43 @@ critical_warnings_exist = False
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ------------- [Environment Variables] -------------
 
-# ------------- [Environmental Variables] -------------
+"""
+The following environment variables are used as API keys for 3rd party applications. 
+
+Requirements:
+    - DEEPGRAM_API_KEY: A string representing the Deepgram API key.
+        [Environment variable in: local, development, production]
+    - MIDDLESIGHT_API_KEY: A string representing the Middlesight API key.
+        [Environment variable in: local, development, production]
+"""
+
+# Deepgram API key
+DEEPGRAM_API_KEY = os.environ.get("DEEPGRAM_API_KEY")
+
+if DEEPGRAM_API_KEY==None:
+    running_deployment_transcript+= red_critical(f'[Critical] DEEPGRAM_API_KEY environment variable not set. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+    critical_warnings_exist = True
+
+elif len(DEEPGRAM_API_KEY)<3:
+    running_deployment_transcript+= red_critical(f'[Critical] DEEPGRAM_API_KEY environment variable is invalid (<3 chars). (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+    critical_warnings_exist = True
+
+
+# Middlesight API key
+MIDDLESIGHT_API_KEY = os.environ.get("MIDDLESIGHT_API_KEY")
+
+if MIDDLESIGHT_API_KEY==None:
+    running_deployment_transcript+= red_critical(f'[Critical] MIDDLESIGHT_API_KEY environment variable not set. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+    critical_warnings_exist = True
+
+elif len(MIDDLESIGHT_API_KEY)<3:
+    running_deployment_transcript+= red_critical(f'[Critical] MIDDLESIGHT_API_KEY environment variable is invalid (<3 chars). (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+    critical_warnings_exist = True
+
+
+# ------------- [Environment Variables for Django App] -------------
 
 """
 Set the deployment environment by setting the DEPLOYMENT environment variable.
@@ -81,7 +150,7 @@ running_deployment_transcript+= f'\n [Logging] Running in {DEPLOYMENT}. (Line {i
 
 """
 Set the secret_key, debug mode, and allowed hosts based on the 
-deployment environment and the environmental variables.
+deployment environment and the environment variables.
 
 Requirements:
     - SECRET_KEY: A secret key for the Django project. 
@@ -101,6 +170,10 @@ else: # Development and production
         running_deployment_transcript+= red_critical(f'[Critical] SECRET_KEY environment variable not set or is not sufficient in length. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
         critical_warnings_exist = True
 
+    if "django-insecure" in SECRET_KEY:
+        running_deployment_transcript+= yellow_warning(f'[Warning] SECRET_KEY is set to a default "django-insecure" value. This is not recommended for production. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+
+
 # Set the debug mode.
 if DEPLOYMENT == 'local':
     # SECURITY WARNING: don't run with debug turned on in production!
@@ -114,16 +187,35 @@ if DEPLOYMENT == 'local':
     ALLOWED_HOSTS = ['*']
     running_deployment_transcript+= yellow_warning(f'[Warning] ALLOWED_HOSTS is set to ["*"]. This is not recommended for production. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
 else: # Development, staging, and production
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
     # Check if valid
     if len(ALLOWED_HOSTS) == 0: # if invalid
         running_deployment_transcript+= red_critical(f'[Critical] ALLOWED_HOSTS environment variable not working. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
         critical_warnings_exist = True
 
+    if DEPLOYMENT == "production":
+        if ALLOWED_HOSTS[0] == '*':
+            running_deployment_transcript+= red_critical(f'[Critical] ALLOWED_HOSTS is set to ["*"]. This is highly not recommended for production. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+            critical_warnings_exist = True
+        
+        # See if localhost or 127.0.0.1 is in the allowed hosts.
+        localhost_in_allowed_hosts = False
+        for host in ALLOWED_HOSTS:
+            if 'localhost' in host or '127.0.0.1' in host or '0.0.0.0' in host:
+                if 'localhost' in host and '.' in localhost: # Fix edge case where localhost is in a valid prod url (such as localhostproduct.com)
+                    pass
+                else:
+                    localhost_in_allowed_hosts = True
+                    break
+        
+        if localhost_in_allowed_hosts:
+            running_deployment_transcript+= red_critical(f'[Critical] ALLOWED_HOSTS has localhost, 127.0.0.1, or 0.0.0.0. This is highly not recommended for production. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+            critical_warnings_exist = True
+
 
 """
 Set the database based upon the deployment environment and 
-the environmental variables.
+the environment variables.
 
 Requirements:
     - DATABASES: Local SQLite3 or Database url for the postgresql database.
@@ -156,15 +248,22 @@ elif DEPLOYMENT == 'development' or DEPLOYMENT == 'production':
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'audio',
+    'ai4collab',
+    "accounts",
+    "llm",
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ai4collab',
-    'audio',
 ]
+
+AUTH_USER_MODEL = "accounts.CustomUser"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -198,6 +297,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ai4collab.wsgi.application'
 
 
+ASGI_APPLICATION = 'ai4collab.routing.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
+#TODO: deploy better setup for production
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+#         'CONFIG': {
+#             'hosts': [('localhost', 6379)],
+#         },
+#     },
+# }
 
 
 
@@ -259,6 +375,10 @@ if critical_warnings_exist:
 else:
     print(green_success(f'No errors found in settings.py {DEPLOYMENT} deployment.'))
 print("\n")
+
+DEPLOYMENT_TRANSCRIPT = running_deployment_transcript
+CRIT_WARNINGS_EXIST = critical_warnings_exist
+
 
 # ------------- [End of File] -------------
 

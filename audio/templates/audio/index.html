@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+        <!-- Include the Tailwind CSS CDN -->
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <style>
+            /* Hide the boxes when they're empty */
+            .content-box:empty {
+                display: none;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-100 font-sans antialiased text-gray-900">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold my-8">Ai4Collab</h1>
+            <p id="status" class="text-xl font-semibold">Connection status will go here</p>
+            <div id="transcript" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 500px;">Say something to begin.</div>
+            <div class="my-4 " style="padding-bottom:50px;">
+                <textarea style="resize: none;" id="customPrompt" placeholder="Enter your prompt here" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                <button id="askLLMButton" style="background-color: #075185; color: white; border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; transition-duration: 500ms; cursor: pointer; width: 100%; float: right;">Ask LLM</button>
+            </div>
+
+            <pre id="jsonResponse" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 5000px; white-space: pre-wrap;"></pre>
+        </div>
+
+        <script>
+           navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+            if (!MediaRecorder.isTypeSupported('audio/webm'))
+                return alert('Browser not supported')
+
+            const mediaRecorder = new MediaRecorder(stream, {
+                mimeType: 'audio/webm',
+            })
+
+            fetch('/api/token/')
+            .then(response => response.json())
+            .then(data => {
+
+                fetch('/api/newsession/')
+                .then(response => response.json())
+                .then(sessiondata => {
+
+                const socket = new WebSocket('ws://localhost:8000/listen/' + data.token + '/' + sessiondata.session_id_token + '/')
+            
+            socket.onopen = () => {
+                let statusElement = document.querySelector('#status');
+                statusElement.textContent = 'Connected';
+                statusElement.classList.remove('text-gray-900');
+                statusElement.classList.add('text-green-600');
+                console.log({ event: 'onopen' })
+                mediaRecorder.addEventListener('dataavailable', async (event) => {
+                    if (event.data.size > 0 && socket.readyState == 1) {
+                        socket.send(event.data)
+                    }
+            })
+            mediaRecorder.start(250)
+            }
+
+            socket.onmessage = (message) => {
+                const received = message.data
+
+                if (received) {
+                    console.log(received);
+                    // TODO: Change this method, it is not secure to directly allow all text to be rendered as html.
+                    const withNewLines = received.replace(/\n/g, "<br />");
+                    if (document.querySelector('#transcript').innerHTML=="Say something to begin."){
+                        document.querySelector('#transcript').innerHTML = '';
+                    }
+                    document.querySelector('#transcript').innerHTML += ' ' + withNewLines;
+                }
+            }
+
+
+           socket.onclose = () => {
+            console.log({ event: 'onclose' })
+            let statusElement = document.querySelector('#status');
+            statusElement.textContent = 'Disconnected';
+            statusElement.classList.remove('text-green-600');
+            statusElement.classList.add('text-gray-900');
+        }
+
+            socket.onerror = (error) => {
+                console.log({ event: 'onerror', error })
+            }
+
+
+
+
+            // Button event listener
+            document.getElementById('askLLMButton').addEventListener('click', () => {
+                
+                //change content to "Loading..."
+                document.getElementById('jsonResponse').innerHTML = 
+                        "Loading..."
+
+                // Important: Flush the buffer before sending the prompt
+                socket.send(JSON.stringify({command: 'flush_buffer'}));
+
+                // Get the value of the input field
+                const prompt = document.getElementById('customPrompt').value;
+
+                // Get session_transcript_id somehow (you will need to implement this)
+                const session_transcript_id = sessiondata.session_id_token;
+
+                // Fetch the API endpoint
+                fetch(`/api/llm/?session_transcript_id=${session_transcript_id}&prompt_for_llm=${encodeURIComponent(prompt)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Replace newline characters with <br> tags in both the prompt and the response
+                    const formattedPrompt = data.prompt_for_llm.replace(/\n/g, "<br>");
+                    const formattedResponse = data.response_from_llm.replace(/\n/g, "<br>");
+
+                    // Display the formatted JSON response
+                    document.getElementById('jsonResponse').innerHTML = 
+                        "<strong>Prompt:</strong> <br>" + formattedPrompt + "<br><br>" +
+                        "<br/><strong>Response:</strong> <br>" + formattedResponse;
+
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    // Display the formatted JSON response
+                    document.getElementById('jsonResponse').innerHTML = 
+                        "Please enter a prompt first."
+                });
+                buttonLlm.textContent = 'Ask LLM';
+            });
+
+            window.addEventListener('beforeunload', (event) => {
+                    event.preventDefault();
+                    event.returnValue = '';
+                        const command = {
+                            command: 'flush_buffer'
+                        };
+                        socket.send(JSON.stringify(command));
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+           })
+
+        </script>
+    </body>
+</html>

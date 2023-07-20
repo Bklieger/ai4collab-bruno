@@ -28,7 +28,19 @@ EXPOSE 8000
 
 RUN python manage.py collectstatic --noinput
 
-# Start the Gunicorn server with 4 workers
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "ai4collab.wsgi"]
 
-# gunicorn --bind 0.0.0.0:8000 --workers 4 ai4collab.wsgi
+# Copy the entrypoint script
+COPY entrypoint.sh .
+
+# Give the execution permissions to the entrypoint script
+RUN chmod +x ./entrypoint.sh
+
+# Run the entrypoint script when the container starts
+CMD ["./entrypoint.sh"]
+
+
+
+# Start the Gunicorn server with 4 workers
+# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "-k", "uvicorn.workers.UvicornWorker", "ai4collab.asgi:application"]
+
+# gunicorn --bind 0.0.0.0:8000 --workers 4 -k uvicorn.workers.UvicornWorker ai4collab.asgi:application
