@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose the default Gunicorn port
-EXPOSE 8000
+# EXPOSE 8000 #RAILWAY
 
 # Run database migrations
 # RUN python manage.py migrate
