@@ -9,3 +9,4 @@ channels==4.0.0
 requests==2.31.0
 uvicorn==0.18.3
 channels-redis==4.1.0
+psycopg2==2.9.5
