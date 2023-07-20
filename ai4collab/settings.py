@@ -218,11 +218,7 @@ else: # Development, staging, and production
 Set DJANGO_CSRF_TRUSTED_ORIGINS based upon ALLOWED_HOSTS. Can change in the future.
 """
 
-if ALLOWED_HOSTS = ['*']:
-    pass
-else:
-    DJANGO_CSRF_TRUSTED_ORIGINS=[]
-
+if DEPLOYMENT != 'local':
     for allowed_host in ALLOWED_HOSTS:
         DJANGO_CSRF_TRUSTED_ORIGINS.append("https://"+allowed_host)
 
