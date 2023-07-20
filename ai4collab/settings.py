@@ -219,6 +219,7 @@ Set DJANGO_CSRF_TRUSTED_ORIGINS based upon ALLOWED_HOSTS. Can change in the futu
 """
 
 if DEPLOYMENT != 'local':
+    DJANGO_CSRF_TRUSTED_ORIGINS=[]
     for allowed_host in ALLOWED_HOSTS:
         DJANGO_CSRF_TRUSTED_ORIGINS.append("https://"+allowed_host)
 
