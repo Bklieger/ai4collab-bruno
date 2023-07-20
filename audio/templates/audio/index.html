@@ -42,7 +42,7 @@
                 .then(sessiondata => {
 
                 // const socket = new WebSocket('ws://localhost:8000/listen/' + data.token + '/' + sessiondata.session_id_token + '/')
-                const socket = new WebSocket('ws://ai4collab.up.railway.app/listen/' + data.token + '/' + sessiondata.session_id_token + '/')
+                const socket = new WebSocket('wss://ai4collab.up.railway.app/listen/' + data.token + '/' + sessiondata.session_id_token + '/')
 
             socket.onopen = () => {
                 let statusElement = document.querySelector('#status');
