@@ -12,6 +12,7 @@ RUN apt-get update && \
 
 ENV PATH="/opt/venv/bin:$PATH"
 
+
 # Copy the requirements.txt file and install Python packages
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -19,19 +20,22 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application files
 COPY . .
 
-
-# Collect static files
+# Run collect static
 RUN python manage.py collectstatic --noinput
 
 
-# ------- [Railway] -------
+# ------- [Non-railway] -------
+
+# Expose the default Gunicorn port
+EXPOSE 8000
 
 # Copy the entrypoint script
-COPY railway.entrypoint.sh .
+COPY entrypoint.sh .
 
 # Give the execution permissions to the entrypoint script
-RUN chmod +x ./railway.entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 # Run the entrypoint script when the container starts
-CMD ["./railway.entrypoint.sh"]
+CMD ["./entrypoint.sh"]
+
 

@@ -20,7 +20,7 @@ In development
 
 ### To build the docker image
 ~~~
-docker build -t ai4collab:latest .
+docker build -f Dockerfile.norail -t ai4collab:latest .
 ~~~
 
 ### Run docker image in same directory as env file
