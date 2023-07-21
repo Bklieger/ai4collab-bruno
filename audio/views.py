@@ -23,7 +23,7 @@ def index(request):
         url_to_use = "localhost:8000" #TODO move to settings.py
         url_to_use = "ws://"+url_to_use
     else:
-        url_to_use = "ai4c-middle.up.railway.app"
+        url_to_use = "ai4collab.up.railway.app"
         url_to_use = "wss://"+url_to_use
     return render(request, 'audio/index.html', {'url_to_use': url_to_use})
 
