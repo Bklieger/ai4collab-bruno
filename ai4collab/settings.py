@@ -2,7 +2,7 @@
 Django settings for ai4collab project.
 
 Environment Variables:
-    - DJANGO_SETTINGS_MODULE: Required for running, always "ai4collab.settings"
+    - DJANGO_SETTINGS_MODULE: Required for running, always ai4collab.settings
         [Environment variable in: local, development, production (all)]
     - DEPLOYMENT: A string representing the deployment environment.
         [Options: local, development, production]
@@ -24,28 +24,28 @@ Requirements for each deployment environment:
     Production: DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
 
 ------- [local.env] --------
-DEPLOYMENT="local"
+DEPLOYMENT=local
 DJANGO_SETTINGS_MODULE=ai4collab.settings
-DEEPGRAM_API_KEY="<add here>"
-MIDDLESIGHT_API_KEY="<add here>"
+DEEPGRAM_API_KEY=<add here>
+MIDDLESIGHT_API_KEY=<add here>
 
 ------- [development.env] --------
-DEPLOYMENT="development"
+DEPLOYMENT=development
 DJANGO_SETTINGS_MODULE=ai4collab.settings
-SECRET_KEY="<add here>"
-PSQL_DATABASE_URL="<add here>"
-ALLOWED_HOSTS="<add here>"
-DEEPGRAM_API_KEY="<add here>"
-MIDDLESIGHT_API_KEY="<add here>"
+SECRET_KEY=<add here>
+PSQL_DATABASE_URL=<add here>
+ALLOWED_HOSTS=<add here>
+DEEPGRAM_API_KEY=<add here>
+MIDDLESIGHT_API_KEY=<add here>
 
 ------- [production.env] --------
-DEPLOYMENT="production"
+DEPLOYMENT=production
 DJANGO_SETTINGS_MODULE=ai4collab.settings
-SECRET_KEY="<add here>"
-PSQL_DATABASE_URL="<add here>"
-ALLOWED_HOSTS="<add here>"
-DEEPGRAM_API_KEY="<add here>"
-MIDDLESIGHT_API_KEY="<add here>"
+SECRET_KEY=<add here>
+PSQL_DATABASE_URL=<add here>
+ALLOWED_HOSTS=<add here>
+DEEPGRAM_API_KEY=<add here>
+MIDDLESIGHT_API_KEY=<add here>
 
 ------- [instructions] -------
 1. Create and fill env file

@@ -20,14 +20,19 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application files
 COPY . .
 
-# Expose the default Gunicorn port
-# EXPOSE 8000 #RAILWAY
+
 
 # Run database migrations
 # RUN python manage.py migrate
 
 RUN python manage.py collectstatic --noinput
 
+
+
+# ------- [Non-railway] -------
+
+# Expose the default Gunicorn port
+EXPOSE 8000
 
 # Copy the entrypoint script
 COPY entrypoint.sh .
@@ -37,6 +42,24 @@ RUN chmod +x ./entrypoint.sh
 
 # Run the entrypoint script when the container starts
 CMD ["./entrypoint.sh"]
+
+
+# ------- [Railway] -------
+
+# # Copy the entrypoint script
+# COPY railway.entrypoint.sh .
+
+# # Give the execution permissions to the entrypoint script
+# RUN chmod +x ./railway.entrypoint.sh
+
+# # Run the entrypoint script when the container starts
+# CMD ["./railway.entrypoint.sh"]
+
+
+
+
+
+
 
 
 
