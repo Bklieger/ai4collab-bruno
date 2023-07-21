@@ -2,6 +2,8 @@
 
 # Django
 from django.shortcuts import render
+from django.http import Http404
+
 
 # Import settings, warning: contains sensitive variables
 from django.conf import settings
@@ -14,4 +16,7 @@ critical_warnings_exist = settings.CRIT_WARNINGS_EXIST # Boolean
 
 
 def deployment_status(request):
+    #ensure user is superadmin
+    if not request.user.is_superuser:
+        raise Http404
     return render(request, 'deployment_status.html', {'running_deployment_transcript': running_deployment_transcript, 'critical_warnings_exist': critical_warnings_exist})
