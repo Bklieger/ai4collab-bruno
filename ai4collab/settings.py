@@ -338,14 +338,18 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://localhost:3000",
 ]
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_HTTPONLY = True
 
-SESSION_COOKIE_SECURE = False # until we get https on FE
-# TODO change later for more secure setup, not possible until prod FE is setup
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
 
+
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
 
 
 MIDDLEWARE = [
