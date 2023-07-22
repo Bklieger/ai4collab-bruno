@@ -2,6 +2,10 @@
 Django settings for ai4collab project.
 
 Environment Variables:
+    - GOOGLE_CLIENT_ID: A string representing the Google OAuth2 client ID.
+        [Environment variable in: local, development, production]
+    - GOOGLE_CLIENT_SECRET: A string representing the Google OAuth2 client secret.
+        [Environment variable in: local, development, production]
     - DJANGO_SETTINGS_MODULE: Required for running, always ai4collab.settings
         [Environment variable in: local, development, production (all)]
     - DEPLOYMENT: A string representing the deployment environment.
@@ -19,15 +23,18 @@ Environment Variables:
         [Environment variable in: local, development, production]
 
 Requirements for each deployment environment:
-    Local: DJANGO_SETTINGS_MODULE, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required. DEPLOYMENT recommended.
-    Development: DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
-    Production: DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
+    Local: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required. DEPLOYMENT recommended.
+    Development: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
+    Production: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
+
 
 ------- [local.env] --------
 DEPLOYMENT=local
 DJANGO_SETTINGS_MODULE=ai4collab.settings
 DEEPGRAM_API_KEY=<add here>
 MIDDLESIGHT_API_KEY=<add here>
+GOOGLE_CLIENT_ID=<add here>
+GOOGLE_SECRET_KEY=<add here>
 
 ------- [development.env] --------
 DEPLOYMENT=development
@@ -37,6 +44,8 @@ PSQL_DATABASE_URL=<add here>
 ALLOWED_HOSTS=<add here>
 DEEPGRAM_API_KEY=<add here>
 MIDDLESIGHT_API_KEY=<add here>
+GOOGLE_CLIENT_ID=<add here>
+GOOGLE_SECRET_KEY=<add here>
 
 ------- [production.env] --------
 DEPLOYMENT=production
@@ -46,6 +55,8 @@ PSQL_DATABASE_URL=<add here>
 ALLOWED_HOSTS=<add here>
 DEEPGRAM_API_KEY=<add here>
 MIDDLESIGHT_API_KEY=<add here>
+GOOGLE_CLIENT_ID=<add here>
+GOOGLE_SECRET_KEY=<add here>
 
 ------- [instructions] -------
 1. Create and fill env file
@@ -255,6 +266,23 @@ elif DEPLOYMENT == 'development' or DEPLOYMENT == 'production':
 
 
 
+
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.environ.get("GOOGLE_CLIENT_ID"),
+            'secret': os.environ.get("GOOGLE_SECRET_KEY"),
+            'key': ''
+        }
+    }
+}
+
+
+
+
 # ------------- [Other Application Settings] -------------
 
 # Application definition
@@ -266,6 +294,8 @@ INSTALLED_APPS = [
     "accounts",
     "llm",
     'rest_framework',
+
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -273,19 +303,49 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders', # CORS
+
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'dj_rest_auth',
 ]
 
+# Important for allauth
+SITE_ID = 1
+
+
 AUTH_USER_MODEL = "accounts.CustomUser"
+
+REST_AUTH = {
+    'TOKEN_MODEL': None,
+    'SESSION_LOGIN': True,
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
-SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_HTTPONLY = True
 
-if DEPLOYMENT == 'production':
-    SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+
+
 
 
 MIDDLEWARE = [
