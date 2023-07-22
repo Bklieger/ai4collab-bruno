@@ -280,6 +280,12 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SAMESITE = 'None'
+
+if DEPLOYMENT == 'production':
+    SESSION_COOKIE_SECURE = True
 
 
 MIDDLEWARE = [
