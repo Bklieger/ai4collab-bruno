@@ -22,6 +22,7 @@ from .views import deployment_status
 urlpatterns = [
     path('', include('audio.urls')),
     path('', include('llm.urls')),
+    path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
     path('deployment/', deployment_status, name='deployment'),
 ]

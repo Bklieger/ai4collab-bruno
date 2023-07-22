@@ -10,3 +10,5 @@ requests==2.31.0
 uvicorn==0.18.3
 channels-redis==4.1.0
 psycopg2==2.9.5
+django-allauth==0.54.0
+dj-rest-auth==4.0.1
