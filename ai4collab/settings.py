@@ -343,8 +343,8 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 SESSION_COOKIE_HTTPONLY = True
 
-# SESSION_COOKIE_SECURE = True
-
+SESSION_COOKIE_SECURE = False # until we get https on FE
+# TODO change later for more secure setup, not possible until prod FE is setup
 
 
 

@@ -30,7 +30,7 @@ def index(request):
 
 @method_decorator(login_required, name='dispatch')
 class WebsocketTokenView(APIView):
-    def get(self, request):
+    def get(self, request): #Note, get_or_create would also work here
         try:
             object_for_token = WebsocketToken.objects.get(user=request.user)
             return Response({"token": object_for_token.token})
