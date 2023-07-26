@@ -32,6 +32,10 @@ class LlmView(APIView):
                 return Response({"error": "session_transcript_id is invalid"}, status=status.HTTP_400_BAD_REQUEST)
 
             transcript_from_session_transcript = object_for_response.transcript
+            
+            # return error if transcript is empty
+            if transcript_from_session_transcript==None:
+                return Response({"error": "transcript is empty"}, status=status.HTTP_400_BAD_REQUEST)
 
             prompt_for_llm = "Transcript: \n\n"+transcript_from_session_transcript+"\n--------------\n\nInstructions: "+prompt_for_llm
             response_from_llm = get_llm_feedback(prompt_for_llm)
