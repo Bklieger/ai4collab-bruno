@@ -5,6 +5,11 @@ import sys
 
 
 def main():
+    """Run checks"""
+    # Ensure using python3
+    if sys.version_info[0] < 3:
+        raise Exception("Must be using Python 3")
+
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ai4collab.settings')
     try:

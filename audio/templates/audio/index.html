@@ -4,6 +4,8 @@
         <title>Chat</title>
         <!-- Include the Tailwind CSS CDN -->
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
         <style>
             /* Hide the boxes when they're empty */
             .content-box:empty {
@@ -12,19 +14,173 @@
         </style>
     </head>
     <body class="bg-gray-100 font-sans antialiased text-gray-900">
+
+
         <div class="container mx-auto px-4">
-            <h1 class="text-4xl font-bold my-8">Ai4Collab</h1>
-            <p id="status" class="text-xl font-semibold">Connection status will go here</p>
-            <div id="transcript" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 500px;">Say something to begin.</div>
-            <div class="my-4 " style="padding-bottom:50px;">
-                <textarea style="resize: none;" id="customPrompt" placeholder="Enter your prompt here" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm"></textarea>
-                <button id="askLLMButton" style="background-color: #075185; color: white; border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; transition-duration: 500ms; cursor: pointer; width: 100%; float: right;">Ask LLM</button>
+            <div class="flex items-center justify-between">
+                <h1 class="text-4xl font-bold my-8 text-yellow-600">Bruno</h1>
+                <div class="flex flex-col items-center mt-4">
+
+                    <button id="record-button" class="w-8 h-8 rounded-full flex items-center justify-center fas fa-record-vinyl" onclick="toggleRecording()"></button>
+                        <!-- <div class="w-6 h-6 border border-white rounded-full"></div> -->
+                        <span class="record-text" style="margin-top:5px;">Record</span>
+                        <span class="pause-text" style="display:none;margin-top:5px;">Pause</span>
+                    </button>
+
+                    <style>.fas {
+                        color: rgb(239 68 68);
+                        font-size: 2rem;
+                    }
+                    </style>
+                    
+
+                    <style>
+                        .banner {
+                            position: fixed;
+                            bottom: 0;
+                            left: 0;
+                            width: 100%;
+                            background-color: rgb(219, 219, 219);
+                            padding: 0px 0;
+                            text-align: center; 
+                            z-index: 1000;
+                        }
+                    </style>
+                    
+                    <span id="banner-style" class="banner text-center text-base">
+                        <p id="status" style="font-weight:600;padding:5px;">Connecting to server...</p>
+                    </span>
+
+                    <div id="overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);z-index:100;"></div>
+
+                </div>
+
+                <div style="width:100px;"></div>
             </div>
 
+
+            <div class="flex flex-wrap justify-start items-start">
+                <div class="flex flex-col md:flex-row w-full">
+                    <div class="md:flex md:flex-col md:w-2/3 p-1">
+                        <div class="p-4 flex-grow text-base">
+                            Transcript
+                            <div id="transcript" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 500px; min-height:275px;">Say something to begin.</div>
+
+                        </div>
+                        <div class="p-4 flex-grow text-base">
+                            Prompt + Response
+
+
+
+
+                            <div class="my-4" style="padding-bottom:50px;">
+
+
+                                       
+
+
+                                <div id="" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 500px; min-height:275px;">
+
+                                     <!-- Bruno AI -->
+        <div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;">
+            <div class="profile-photo" style="width: 38px; height: 35px;  border-radius: 50%; background-color: orange; color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">B</div>
+            <div class="message-content" style="max-width: 95%;">
+                <h5 class="message-author" style="font-weight: bold; margin-bottom: 5px;">Bruno AI</h5>
+                <p class="message-text" id="brunoResponse">Bruno AI's feedback will appear here. This is a placeholder to show where the feedback will show.</p>
+            </div>
+        </div>
+
+          <!-- Bruno AI -->
+          <div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;">
+            <div class="profile-photo" style="width: 38px; height: 35px; border-radius: 50%; background-color: rgb(208, 208, 208); color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">U</div>
+            <div class="message-content" style="max-width: 95%;">
+                <h5 class="message-author" style="font-weight: bold; margin-bottom: 5px;">You</h5>
+                <p class="message-text" id="brunoResponse">This is a past message made by the user to Bruno.</p>
+            </div>
+        </div>
+
+         <!-- Bruno AI -->
+         <div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;">
+            <div class="profile-photo" style="width: 38px; height: 35px; border-radius: 50%; background-color: orange; color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">B</div>
+            <div class="message-content" style="max-width: 95%;">
+                <h5 class="message-author" style="font-weight: bold; margin-bottom: 5px;">Bruno AI</h5>
+                <p class="message-text" id="brunoResponse">This is Bruno's response.</p>
+            </div>
+        </div>
+
+
+                                <textarea style="resize: none;" id="customPrompt" placeholder="Send a prompt" rows="1" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm" style="border-width:2px;"></textarea>
+
+                            </div>
+
+                                <div class="flex justify-end items-center mt-2">
+                                    <button id="restartButton" style="color: #075185; border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; margin-right:0px; transition-duration: 500ms; cursor: pointer; width: 175px; text-decoration: underline;" class="flex items-center justify-center">
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="margin-right:5px;">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                      </svg>
+                                      
+                                      Reset Session</button>
+
+                                      
+                                                                        <button id="askLLMButton" style="background-color: #075185; color: white;border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; transition-duration: 500ms; cursor: pointer; width: 175px;">Ask Bruno</button>
+                                </div>
+                            </div>
+                            
+
             <pre id="jsonResponse" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 5000px; white-space: pre-wrap;"></pre>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                    <div class="md:w-1/3 p-1">
+                        <div class="p-4 h-full text-base">
+                           Instructions    
+                           <div id="" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 1000px;min-height:662px;">1. Start talking about your project.<br/><br/>2. When you feel stuck or unsure what to do next, ask the following prompt: "Who spoke the most in the conversation?"</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+
+
+
+
+
+
+
         </div>
 
         <script>
+
+            function toggleRecording() {
+            const recordButton = document.getElementById("record-button");
+            // see if record-vinyl one of the classes
+            const isRecordingClass = recordButton.classList.contains("fa-record-vinyl");
+
+            if (isRecordingClass) {
+            
+
+                recordButton.classList.remove("fa-record-vinyl");
+                recordButton.classList.add("fa-pause-circle");
+            } else {
+               
+                recordButton.classList.remove("fa-pause-circle");
+                recordButton.classList.add("fa-record-vinyl");
+
+            }
+
+            }
+
+
+
            navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
             if (!MediaRecorder.isTypeSupported('audio/webm'))
                 return alert('Browser not supported')
@@ -46,16 +202,85 @@
 
             socket.onopen = () => {
                 let statusElement = document.querySelector('#status');
+
+                let bannerElement = document.querySelector('#banner-style');
+                bannerElement.style.backgroundColor = '#078507';
+                
+                let overlayElement = document.querySelector('#overlay');
+                overlayElement.style.display = 'none';
+
+
                 statusElement.textContent = 'Connected';
-                statusElement.classList.remove('text-gray-900');
-                statusElement.classList.add('text-green-600');
+                statusElement.style.color = '#ffffff';
+                //Hide
+                statusElement.style.display = 'none';
+              
+
                 console.log({ event: 'onopen' })
                 mediaRecorder.addEventListener('dataavailable', async (event) => {
                     if (event.data.size > 0 && socket.readyState == 1) {
                         socket.send(event.data)
                     }
+
+                                // Send KeepAlive message (if not sending audio?)
+
+
             })
-            mediaRecorder.start(250)
+            // mediaRecorder.start(250)
+
+
+            //TODO: Will it improve performance if only send while paused? Could check status through JS variable or class states on pause button.
+            setInterval(function() {
+                if (socket.readyState === WebSocket.OPEN) {
+                    console.log("Sending Keep Alive...");
+                    socket.send(JSON.stringify({command: 'keep_alive'}));
+                }
+            }, 8000);
+
+
+            let isRecording = false;
+
+
+            document.getElementById('record-button').addEventListener('click', function() {
+                // Toggle recording state
+                isRecording = !isRecording;
+
+                // Update the button's visual state
+                if (isRecording) {
+                    // Change button style to indicate recording
+                    
+
+                    // Hide record text and show pause text
+                    document.querySelector('.record-text').style.display = 'none';
+                    document.querySelector('.pause-text').style.display = 'block';
+
+                    console.log("Recording")
+
+                    // Start the MediaRecorder
+                    mediaRecorder.start(250);
+
+                } else {
+                    // Change button style back to default
+                    // this.style.backgroundColor = 'red';
+
+                    // Hide pause text and show record text
+                    document.querySelector('.pause-text').style.display = 'none';
+                    document.querySelector('.record-text').style.display = 'block';
+
+                    // Stop the MediaRecorder
+                    mediaRecorder.stop();
+                    console.log("stop")
+
+                    // Send the pause command or any desired message through the socket
+                    // const command = {
+                    //     command: 'paused'
+                    // };
+                    // socket.send(JSON.stringify(command));
+                }
+            });
+
+
+
             }
 
             socket.onmessage = (message) => {
@@ -76,14 +301,24 @@
            socket.onclose = () => {
             console.log({ event: 'onclose' })
             let statusElement = document.querySelector('#status');
-            statusElement.textContent = 'Disconnected';
-            statusElement.classList.remove('text-green-600');
-            statusElement.classList.add('text-gray-900');
+            let bannerElement = document.querySelector('#banner-style');
+            bannerElement.style.backgroundColor = 'orange';
+
+            let overlayElement = document.querySelector('#overlay');
+            overlayElement.style.display = 'block';
+
+
+            statusElement.style.display = 'block';
+            statusElement.textContent = 'Disconnected - Please Reload';
+            statusElement.style.color = '#ffffff';
         }
 
             socket.onerror = (error) => {
                 console.log({ event: 'onerror', error })
             }
+
+
+            
 
 
 
