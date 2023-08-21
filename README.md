@@ -14,6 +14,10 @@ The project also leverages Docker to normalize runtime environments and increase
 
 In development
 
+## Audio to Text Details
+
+The application currently utilizes deepgram's live transcription and diarization. When the recording is paused, the websocket with the backend as a proxy to deepgram is still open, but no audio data is sent. The socket is kept alive using a keepAlive message sent to the BE then to Deepgram.
+
 ## Ai4collab-backend Instructions to Run
 
 ## Instructions with Docker
@@ -47,7 +51,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ~~~
 
-### Set Environment variables
+### Set environment variables
 ~~~
 touch {DEPLOYMENT}.env
 ~~~

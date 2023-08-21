@@ -38,7 +38,7 @@ class TranscriptConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_transcripts(self):
-        SessionTranscript = apps.get_model('audio', 'SessionTranscript') #TODO: Most efficient?
+        SessionTranscript = apps.get_model('audio', 'SessionTranscript')
         total_content = ""
         for transcript in self.buffer:
             total_content += transcript
@@ -106,8 +106,6 @@ class TranscriptConsumer(AsyncWebsocketConsumer):
         self.room_name = "basic_audio_connection"
         self.room_group_name = f'transcript_{self.room_name}'
 
-        # self.token_user = await token_obj.user #TODO add check to ensure user is not none? make sure the code reaches here
-
         await self.connect_to_deepgram()
         await self.accept()
 
@@ -118,7 +116,7 @@ class TranscriptConsumer(AsyncWebsocketConsumer):
         )
         
         
-    async def disconnect(self, close_code): #TODO: add max time limit or check again for auth?
+    async def disconnect(self, close_code):
        await self.channel_layer.group_discard(
            self.room_group_name,
            self.channel_name
@@ -132,14 +130,18 @@ class TranscriptConsumer(AsyncWebsocketConsumer):
             if data.get('command') == 'flush_buffer':
                 await self.save_transcripts()
                 pass
+                # Check for the keep_alive command from the frontend
+            elif data.get('command') == 'keep_alive':
+                print("Sending keep alive.")
+                keep_alive_message = {'type': 'KeepAlive'}
+                if self.socket:  # Check if socket is initialized
+                    self.socket.send(json.dumps(keep_alive_message)) # Sends keep alive to deepgram socket
 
-
-#TODO: make sure session is attached to the user requesting it
 class TranscriptConsumerFollowup(TranscriptConsumer):
 
-    @database_sync_to_async #TODO: check to see if session id is valid first on connect?
+    @database_sync_to_async
     def save_transcripts(self):
-        SessionTranscript = apps.get_model('audio', 'SessionTranscript') #TODO: Most efficient?
+        SessionTranscript = apps.get_model('audio', 'SessionTranscript')
 
 
         total_content = ""
