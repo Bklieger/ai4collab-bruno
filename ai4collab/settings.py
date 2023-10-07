@@ -330,6 +330,12 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
 
 
+if DEPLOYMENT == "production":
+    ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 REST_AUTH = {
