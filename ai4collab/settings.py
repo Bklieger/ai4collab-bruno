@@ -330,9 +330,8 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
 
 
-if DEPLOYMENT == "production":
+if DEPLOYMENT != 'local' and DEPLOYMENT != 'development':
     ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 
