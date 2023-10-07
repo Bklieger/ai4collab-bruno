@@ -1,1 +1,2 @@
-1. Filter results of Audio based upon confidence?
+1. Add logout option
+2. Improve transcription accuracy

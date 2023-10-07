@@ -267,18 +267,15 @@ elif DEPLOYMENT == 'development' or DEPLOYMENT == 'production':
 
 
 
-
-
-
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
             'client_id': os.environ.get("GOOGLE_CLIENT_ID"),
             'secret': os.environ.get("GOOGLE_SECRET_KEY"),
-            'key': ''
         }
     }
 }
+
 
 
 
@@ -315,6 +312,22 @@ INSTALLED_APPS = [
 
 # Important for allauth
 SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+]
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/login/'
 
 
 AUTH_USER_MODEL = "accounts.CustomUser"

@@ -25,4 +25,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('admin/', admin.site.urls),
     path('deployment/', deployment_status, name='deployment'),
+    path('allauth/', include('allauth.urls')),
 ]
