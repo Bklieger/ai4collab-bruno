@@ -1,467 +1,536 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-        <!-- Include the Tailwind CSS CDN -->
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-        <style>
-            /* Hide the boxes when they're empty */
-            .content-box:empty {
-                display: none;
-            }
-        </style>
-    </head>
-    <body class="bg-gray-100 font-sans antialiased text-gray-900">
-
-
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between">
-                <h1 class="text-4xl font-bold my-8 text-yellow-600">Bruno</h1>
-                <div class="flex flex-col items-center mt-4">
-
-                    <button id="record-button" class="w-8 h-8 rounded-full flex items-center justify-center fas fa-record-vinyl" onclick="toggleRecording()"></button>
-                        <!-- <div class="w-6 h-6 border border-white rounded-full"></div> -->
-                        <span class="record-text" style="margin-top:5px;">Record</span>
-                        <span class="pause-text" style="display:none;margin-top:5px;">Pause</span>
-                    </button>
-
-                    <style>.fas {
-                        color: rgb(239 68 68);
-                        font-size: 2rem;
-                    }
-                    </style>
-                    
-
+            <!DOCTYPE html>
+            <html>
+                <head>
+                    <title>Chat</title>
+                    <!-- Include the Tailwind CSS CDN -->
+                    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+            
                     <style>
-                        .banner {
-                            position: fixed;
-                            bottom: 0;
-                            left: 0;
-                            width: 100%;
-                            background-color: rgb(219, 219, 219);
-                            padding: 0px 0;
-                            text-align: center; 
-                            z-index: 1000;
+                        /* Hide the boxes when they're empty */
+                        .content-box:empty {
+                            display: none;
                         }
                     </style>
-                    
-                    <span id="banner-style" class="banner text-center text-base">
-                        <p id="status" style="font-weight:600;padding:5px;">Connecting to server...</p>
-                    </span>
-
-                    <div id="overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);z-index:100;"></div>
-
-                </div>
-
-                <div style="width:100px;"></div>
-            </div>
-
-
-            <div class="flex flex-wrap justify-start items-start">
-                <div class="flex flex-col md:flex-row w-full">
-                    <div class="md:flex md:flex-col md:w-2/3 p-1">
-                        <div class="p-4 flex-grow text-base">
-                            Transcript
-                            <div id="transcript" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 500px; min-height:275px;">Say something to begin.</div>
-
-                        </div>
-                        <div class="p-4 flex-grow text-base">
-                            Prompt + Response
-
-
-
-
-                            <div class="my-4" style="padding-bottom:50px;">
-
-
-                                       
-
-
-
-                                <div class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 500px; min-height:275px;">
+                </head>
+                <body class="bg-gray-100 font-sans antialiased text-gray-900">
+            
+            
+                    <div class="container mx-auto px-4">
+                        <div class="flex items-center justify-between">
+                            <h1 class="text-4xl font-bold my-8 text-yellow-600">Bruno</h1>
+                            <div class="flex flex-col items-center mt-4">
+            
+                                <button id="record-button" class="w-8 h-8 rounded-full flex items-center justify-center fas fa-record-vinyl" onclick="toggleRecording()"></button>
+                                    <!-- <div class="w-6 h-6 border border-white rounded-full"></div> -->
+                                    <span class="record-text" style="margin-top:5px;">Record</span>
+                                    <span class="pause-text" style="display:none;margin-top:5px;">Pause</span>
+                                </button>
+            
+                                <style>.fas {
+                                    color: rgb(239 68 68);
+                                    font-size: 2rem;
+                                }
+                                </style>
                                 
-                                    <div id="chatContents" style="height:210px;margin-bottom:10px;overflow-y:scroll;box-sizing: border-box;margin-top:3px;">
+            
+                                <style>
+                                    .banner {
+                                        position: fixed;
+                                        bottom: 0;
+                                        left: 0;
+                                        width: 100%;
+                                        background-color: rgb(219, 219, 219);
+                                        padding: 0px 0;
+                                        text-align: center; 
+                                        z-index: 1000;
+                                    }
+                                </style>
+                                
+                                <span id="banner-style" class="banner text-center text-base">
+                                    <p id="status" style="font-weight:600;padding:5px;">Connecting to server...</p>
+                                </span>
+            
+                                <div id="overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);z-index:100;"></div>
+            
+                            </div>
+            
+                            <div style="width:100px;"></div>
+                        </div>
+            
 
 
-        
 
+                     
+                        
+    <div id="settings-gear" class="settings-gear" style="position: fixed; bottom: 20px; right: 20px; cursor: pointer;">
+        ⚙️ 
+    </div>
+
+    <div id="settings-panel" class="settings-panel hidden" style="position: fixed; bottom: 70px; right: 20px; background-color: white; border: 1px solid #ccc; padding: 20px; border-radius: 5px;">
+        <button id="toggleButton" class="toggle-button">Hide Transcript</button>
+    </div>
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    
+        .settings-gear {
+            font-size: 30px; /* Adjust icon size */
+        }
+    
+        .toggle-button {
+            padding: 8px 16px;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style><script>
+document.addEventListener('DOMContentLoaded', function () {
+    var settingsGear = document.getElementById('settings-gear');
+    var settingsPanel = document.getElementById('settings-panel');
+    var toggleButton = document.getElementById('toggleButton');
+    var transcript = document.getElementById('transcript-div');
+
+    // Show/hide settings panel when gear icon is clicked
+    settingsGear.addEventListener('click', function() {
+        if (settingsPanel.classList.contains('hidden')) {
+            settingsPanel.classList.remove('hidden');
+        } else {
+            settingsPanel.classList.add('hidden');
+        }
+    });
+
+    // Show/hide transcript when button in settings panel is clicked
+    toggleButton.addEventListener('click', function() {
+        if (transcript.classList.contains('hidden')) {
+            transcript.classList.remove('hidden');
+            toggleButton.textContent = 'Hide Transcript';
+        } else {
+            transcript.classList.add('hidden');
+            toggleButton.textContent = 'Show Transcript';
+        }
+    });
+});
+</script>
+
+
+
+
+
+            
+                        <div class="flex flex-wrap justify-start items-start">
+                            <div class="flex flex-col md:flex-row w-full">
+                                <div class="md:flex md:flex-col md:w-2/3 p-1">
+                                    <div class="p-4 flex-grow text-base" id="transcript-div">
+                                        
+
+                                        Transcript
+                                        <div id="transcript" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 500px; min-height:275px;">Say something to begin.</div>
+                                        
+                          
 
 
 
                                     </div>
-
-
-                                    <div><textarea style="resize: none;" id="customPrompt" placeholder="Send a prompt" rows="1" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm" style="border-width:2px;"></textarea></div>
-                               
-                                 
-
-
-
-
-
-                            </div>
-
-                                <div class="flex justify-end items-center mt-2">
-                                    <button id="restartButton" style="color: #075185; border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; margin-right:0px; transition-duration: 500ms; cursor: pointer; width: 175px; text-decoration: underline;" class="flex items-center justify-center">
+                                    <div class="p-4 flex-grow text-base">
+                                        Prompt + Response
+            
+            
+            
+            
+                                        <div class="my-4" style="padding-bottom:50px;">
+            
+            
+                                                   
+            
+            
+            
+                                            <div class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 500px; min-height:275px;">
+                                            
+                                                <div id="chatContents" style="height:210px;margin-bottom:10px;overflow-y:scroll;box-sizing: border-box;margin-top:3px;">
+            
+            
+                    
+            
+            
+            
+            
+                                                </div>
+            
+            
+                                                <div><textarea style="resize: none;" id="customPrompt" placeholder="Send a prompt" rows="1" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm" style="border-width:2px;"></textarea></div>
+                                           
+                                             
+            
+            
+            
+            
+            
+                                        </div>
+            
+                                            <div class="flex justify-end items-center mt-2">
+                                                <button id="restartButton" style="color: #075185; border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; margin-right:0px; transition-duration: 500ms; cursor: pointer; width: 175px; text-decoration: underline;" class="flex items-center justify-center">
+                                                    
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="margin-right:5px;">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                                  </svg>
+                                                  
+                                                  Reset Session</button>
+            
+                                                  
+                                                                                    <button id="askLLMButton" style="background-color: #075185; color: white;border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; transition-duration: 500ms; cursor: pointer; width: 175px;">Ask Bruno</button>
+                                            </div>
+                                        </div>
                                         
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5" style="margin-right:5px;">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                                      </svg>
-                                      
-                                      Reset Session</button>
-
-                                      
-                                                                        <button id="askLLMButton" style="background-color: #075185; color: white;border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; transition-duration: 500ms; cursor: pointer; width: 175px;">Ask Bruno</button>
+            
+            
+            
+            
+            
+            
+            
+            
+                                    </div>
+                                </div>
+                                <div class="md:w-1/3 p-1">
+                                    <div class="p-4 h-full text-base">
+                                       Instructions    
+                                       <div id="" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 663px;min-height:663px;">
+                                        
+                                        1. Provide context about your conversation in the field below.<br/><br/>
+                                        <textarea style="resize: none;" id="customContext" placeholder="What is your conversation about?" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                                        <br/><br/>
+            
+                                        2. Click the "record" button at the top.<br/><br/>
+                                        
+                                        3. Start talking about your project.<br/><br/>
+                                    
+                                        4. Ask Bruno questions to get feedback:<br/><br/>
+                                        <div style="font-size:14px;font-style:italic; padding-left:3px;">
+                                        How evenly distributed is our speaking time?<br/>
+                                        Are we actively engaging with each other's ideas?<br/>
+                                        Are there any instances of a speaker being <br/>excluded from the conversation?<br/>
+                                        How much of the conversation has been on topic?<br/>
+                                        How well have we collaborated as a team?<br/>
+                                        Has off topic conversation allowed us to better work together?<br/>
+                                    </div>
+                                        <br/>
+            
+                                        5. Pause Bruno and edit the transcript as needed to improve accuracy.<br/>
+                                    
+                                    
+                                        <div style="width:100%; align-items: right;">
+                                        <br>
+                                        You are signed in. <a href="/accounts/logout" style="text-decoration: underline;">Logout</a>
+                                    </div>
+            
+            
+                                    </div>
+            
+                                    </div>
                                 </div>
                             </div>
-                            
-
-
-
-
-
-
-
-
                         </div>
+                        
+            
+            
+            
+            
+            
+            
+            
+            
                     </div>
-                    <div class="md:w-1/3 p-1">
-                        <div class="p-4 h-full text-base">
-                           Instructions    
-                           <div id="" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" style="max-height: 663px;min-height:663px;">
+            
+                    <script>
+            
+                        function toggleRecording() {
+                        const recordButton = document.getElementById("record-button");
+                        // see if record-vinyl one of the classes
+                        const isRecordingClass = recordButton.classList.contains("fa-record-vinyl");
+            
+                        if (isRecordingClass) {
+                        
+            
+                            recordButton.classList.remove("fa-record-vinyl");
+                            recordButton.classList.add("fa-pause-circle");
+                        } else {
+                           
+                            recordButton.classList.remove("fa-pause-circle");
+                            recordButton.classList.add("fa-record-vinyl");
+            
+                        }
+            
+                        }
+            
+            
+            
+                       navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+                        if (!MediaRecorder.isTypeSupported('audio/webm'))
+                            return alert('Browser not supported')
+            
+                        const mediaRecorder = new MediaRecorder(stream, {
+                            mimeType: 'audio/webm',
+                        })
+            
+                        fetch('/api/token/')
+                        .then(response => response.json())
+                        .then(data => {
+            
+                            fetch('/api/newsession/')
+                            .then(response => response.json())
+                            .then(sessiondata => {
+            
+                            // const socket = new WebSocket('ws://localhost:8000/listen/' + data.token + '/' + sessiondata.session_id_token + '/')
+                            const socket = new WebSocket('{{url_to_use}}/listen/' + data.token + '/' + sessiondata.session_id_token + '/')
+            
+                        socket.onopen = () => {
+                            let statusElement = document.querySelector('#status');
+            
+                            let bannerElement = document.querySelector('#banner-style');
+                            bannerElement.style.backgroundColor = '#078507';
                             
-                            1. Provide context about your conversation in the field below.<br/><br/>
-                            <textarea style="resize: none;" id="customContext" placeholder="What is your conversation about?" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm"></textarea>
-                            <br/><br/>
-
-                            2. Click the "record" button at the top.<br/><br/>
+                            let overlayElement = document.querySelector('#overlay');
+                            overlayElement.style.display = 'none';
+            
+            
+                            statusElement.textContent = 'Connected';
+                            statusElement.style.color = '#ffffff';
+                            //Hide
+                            statusElement.style.display = 'none';
+                          
+            
+                            console.log({ event: 'onopen' })
+                            mediaRecorder.addEventListener('dataavailable', async (event) => {
+                                if (event.data.size > 0 && socket.readyState == 1) {
+                                    socket.send(event.data)
+                                }
+            
+                                            // Send KeepAlive message (if not sending audio?)
+            
+            
+                        })
+                        // mediaRecorder.start(250)
+            
+            
+                        //TODO: Will it improve performance if only send while paused? Could check status through JS variable or class states on pause button.
+                        setInterval(function() {
+                            if (socket.readyState === WebSocket.OPEN) {
+                                console.log("Sending Keep Alive...");
+                                socket.send(JSON.stringify({command: 'keep_alive'}));
+                            }
+                        }, 8000);
+            
+            
+                        let isRecording = false;
+            
+            
+                        document.getElementById('record-button').addEventListener('click', function() {
+                            // Toggle recording state
+                            isRecording = !isRecording;
+            
+                            // Update the button's visual state
+                            if (isRecording) {
+                                // Change button style to indicate recording
+                                
+            
+                                // Hide record text and show pause text
+                                document.querySelector('.record-text').style.display = 'none';
+                                document.querySelector('.pause-text').style.display = 'block';
+            
+                                console.log("Recording")
+            
+                                // Start the MediaRecorder
+                                mediaRecorder.start(250);
+            
+                            } else {
+                                // Change button style back to default
+                                // this.style.backgroundColor = 'red';
+            
+                                // Hide pause text and show record text
+                                document.querySelector('.pause-text').style.display = 'none';
+                                document.querySelector('.record-text').style.display = 'block';
+            
+                                // Stop the MediaRecorder
+                                mediaRecorder.stop();
+                                console.log("stop")
+            
+                                // Send the pause command or any desired message through the socket
+                                // const command = {
+                                //     command: 'paused'
+                                // };
+                                // socket.send(JSON.stringify(command));
+                            }
+                        });
+            
+            
+            
+                        }
+            
+                        socket.onmessage = (message) => {
+                            const received = message.data
+            
+                            if (received) {
+                                console.log(received);
+                                // TODO: Change this method, it is not secure to directly allow all text to be rendered as html.
+                                const withNewLines = received.replace(/\n/g, "<br />");
+                                if (document.querySelector('#transcript').innerHTML=="Say something to begin."){
+                                    document.querySelector('#transcript').innerHTML = '';
+                                }
+                                document.querySelector('#transcript').innerHTML += ' ' + withNewLines;
+                            }
+                        }
+            
+            
+                       socket.onclose = () => {
+                        console.log({ event: 'onclose' })
+                        let statusElement = document.querySelector('#status');
+                        let bannerElement = document.querySelector('#banner-style');
+                        bannerElement.style.backgroundColor = 'orange';
+            
+                        let overlayElement = document.querySelector('#overlay');
+                        overlayElement.style.display = 'block';
+            
+            
+                        statusElement.style.display = 'block';
+                        statusElement.textContent = 'Disconnected - Please Reload';
+                        statusElement.style.color = '#ffffff';
+                    }
+            
+                        socket.onerror = (error) => {
+                            console.log({ event: 'onerror', error })
+                        }
+            
+            
+                        function scrollToBottomOfChat() {
+                        var chatContents = document.getElementById("chatContents");
+                        chatContents.scrollTop = chatContents.scrollHeight;
+                    }
+            
+            
+            
+            
+                        let conversationHistory = "";
+            
+                        
+                        document.getElementById('restartButton').addEventListener('click', () => {
                             
-                            3. Start talking about your project.<br/><br/>
-                        
-                            4. Ask Bruno questions to get feedback:<br/><br/>
-                            <div style="font-size:14px;font-style:italic; padding-left:3px;">
-                            How evenly distributed is our speaking time?<br/>
-                            Are we actively engaging with each other's ideas?<br/>
-                            Are there any instances of a speaker being <br/>excluded from the conversation?<br/>
-                            How much of the conversation has been on topic?<br/>
-                            How well have we collaborated as a team?<br/>
-                            Has off topic conversation allowed us to better work together?<br/>
-                        </div>
-                            <br/>
-
-                            5. Pause Bruno and edit the transcript as needed to improve accuracy.<br/>
-                        
-                        
-                            <div style="width:100%; align-items: right;">
-                            <br>
-                            You are signed in. <a href="/accounts/logout" style="text-decoration: underline;">Logout</a>
-                        </div>
-
-
-                        </div>
-
-                        </div>
-                    </div>
-                </div>
+                            conversationHistory = "";
+                            document.getElementById('chatContents').innerHTML = "";
+            
+                        });
+                       
+            
+                        // Button event listener
+                        document.getElementById('askLLMButton').addEventListener('click', () => {
+                            
+            
+                            // Important: Flush the buffer before sending the prompt
+                            socket.send(JSON.stringify({command: 'flush_buffer'}));
+            
+                            // Get the value of the input field
+                            const prompt = document.getElementById('customPrompt').value;
+            
+                            you_template = `
+            <div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;">
+            <div class="profile-photo" style="min-width: 38px; height: 35px; border-radius: 50%; background-color: rgb(208, 208, 208); color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">U</div>
+            <div class="message-content" style="max-width: 95%;">
+                <h5 class="message-author" style="font-weight: bold; margin-bottom: 0px;">You</h5>
+                <p class="message-text" id="brunoResponse">${prompt}</p>
             </div>
+            </div>
+            `
+                            document.getElementById('customPrompt').value = "";
+                            //TODO add loading symbol
+                            //TODO ensure proper sanitization
             
-
-
-
-
-
-
-
-
-        </div>
-
-        <script>
-
-            function toggleRecording() {
-            const recordButton = document.getElementById("record-button");
-            // see if record-vinyl one of the classes
-            const isRecordingClass = recordButton.classList.contains("fa-record-vinyl");
-
-            if (isRecordingClass) {
+                            document.getElementById('chatContents').innerHTML = document.getElementById('chatContents').innerHTML +
+                                you_template;
             
-
-                recordButton.classList.remove("fa-record-vinyl");
-                recordButton.classList.add("fa-pause-circle");
-            } else {
-               
-                recordButton.classList.remove("fa-pause-circle");
-                recordButton.classList.add("fa-record-vinyl");
-
-            }
-
-            }
-
-
-
-           navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-            if (!MediaRecorder.isTypeSupported('audio/webm'))
-                return alert('Browser not supported')
-
-            const mediaRecorder = new MediaRecorder(stream, {
-                mimeType: 'audio/webm',
-            })
-
-            fetch('/api/token/')
-            .then(response => response.json())
-            .then(data => {
-
-                fetch('/api/newsession/')
-                .then(response => response.json())
-                .then(sessiondata => {
-
-                // const socket = new WebSocket('ws://localhost:8000/listen/' + data.token + '/' + sessiondata.session_id_token + '/')
-                const socket = new WebSocket('{{url_to_use}}/listen/' + data.token + '/' + sessiondata.session_id_token + '/')
-
-            socket.onopen = () => {
-                let statusElement = document.querySelector('#status');
-
-                let bannerElement = document.querySelector('#banner-style');
-                bannerElement.style.backgroundColor = '#078507';
-                
-                let overlayElement = document.querySelector('#overlay');
-                overlayElement.style.display = 'none';
-
-
-                statusElement.textContent = 'Connected';
-                statusElement.style.color = '#ffffff';
-                //Hide
-                statusElement.style.display = 'none';
-              
-
-                console.log({ event: 'onopen' })
-                mediaRecorder.addEventListener('dataavailable', async (event) => {
-                    if (event.data.size > 0 && socket.readyState == 1) {
-                        socket.send(event.data)
-                    }
-
-                                // Send KeepAlive message (if not sending audio?)
-
-
-            })
-            // mediaRecorder.start(250)
-
-
-            //TODO: Will it improve performance if only send while paused? Could check status through JS variable or class states on pause button.
-            setInterval(function() {
-                if (socket.readyState === WebSocket.OPEN) {
-                    console.log("Sending Keep Alive...");
-                    socket.send(JSON.stringify({command: 'keep_alive'}));
-                }
-            }, 8000);
-
-
-            let isRecording = false;
-
-
-            document.getElementById('record-button').addEventListener('click', function() {
-                // Toggle recording state
-                isRecording = !isRecording;
-
-                // Update the button's visual state
-                if (isRecording) {
-                    // Change button style to indicate recording
-                    
-
-                    // Hide record text and show pause text
-                    document.querySelector('.record-text').style.display = 'none';
-                    document.querySelector('.pause-text').style.display = 'block';
-
-                    console.log("Recording")
-
-                    // Start the MediaRecorder
-                    mediaRecorder.start(250);
-
-                } else {
-                    // Change button style back to default
-                    // this.style.backgroundColor = 'red';
-
-                    // Hide pause text and show record text
-                    document.querySelector('.pause-text').style.display = 'none';
-                    document.querySelector('.record-text').style.display = 'block';
-
-                    // Stop the MediaRecorder
-                    mediaRecorder.stop();
-                    console.log("stop")
-
-                    // Send the pause command or any desired message through the socket
-                    // const command = {
-                    //     command: 'paused'
-                    // };
-                    // socket.send(JSON.stringify(command));
-                }
-            });
-
-
-
-            }
-
-            socket.onmessage = (message) => {
-                const received = message.data
-
-                if (received) {
-                    console.log(received);
-                    // TODO: Change this method, it is not secure to directly allow all text to be rendered as html.
-                    const withNewLines = received.replace(/\n/g, "<br />");
-                    if (document.querySelector('#transcript').innerHTML=="Say something to begin."){
-                        document.querySelector('#transcript').innerHTML = '';
-                    }
-                    document.querySelector('#transcript').innerHTML += ' ' + withNewLines;
-                }
-            }
-
-
-           socket.onclose = () => {
-            console.log({ event: 'onclose' })
-            let statusElement = document.querySelector('#status');
-            let bannerElement = document.querySelector('#banner-style');
-            bannerElement.style.backgroundColor = 'orange';
-
-            let overlayElement = document.querySelector('#overlay');
-            overlayElement.style.display = 'block';
-
-
-            statusElement.style.display = 'block';
-            statusElement.textContent = 'Disconnected - Please Reload';
-            statusElement.style.color = '#ffffff';
-        }
-
-            socket.onerror = (error) => {
-                console.log({ event: 'onerror', error })
-            }
-
-
-            function scrollToBottomOfChat() {
-            var chatContents = document.getElementById("chatContents");
-            chatContents.scrollTop = chatContents.scrollHeight;
-        }
-
-
-
-
-            let conversationHistory = "";
-
+                            scrollToBottomOfChat();
             
-            document.getElementById('restartButton').addEventListener('click', () => {
-                
-                conversationHistory = "";
-                document.getElementById('chatContents').innerHTML = "";
-
-            });
-           
-
-            // Button event listener
-            document.getElementById('askLLMButton').addEventListener('click', () => {
-                
-
-                // Important: Flush the buffer before sending the prompt
-                socket.send(JSON.stringify({command: 'flush_buffer'}));
-
-                // Get the value of the input field
-                const prompt = document.getElementById('customPrompt').value;
-
-                you_template = `
-<div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;">
-<div class="profile-photo" style="min-width: 38px; height: 35px; border-radius: 50%; background-color: rgb(208, 208, 208); color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">U</div>
-<div class="message-content" style="max-width: 95%;">
-    <h5 class="message-author" style="font-weight: bold; margin-bottom: 0px;">You</h5>
-    <p class="message-text" id="brunoResponse">${prompt}</p>
-</div>
-</div>
-`
-                document.getElementById('customPrompt').value = "";
-                //TODO add loading symbol
-                //TODO ensure proper sanitization
-
-                document.getElementById('chatContents').innerHTML = document.getElementById('chatContents').innerHTML +
-                    you_template;
-
-                scrollToBottomOfChat();
-
-                // Get session_transcript_id somehow (you will need to implement this)
-                const session_transcript_id = sessiondata.session_id_token;
-                const context = document.getElementById('customContext').value;
-
-                const persona = "You are Bruno, an AI coach that gives feedback on the conversation in the transcript above. The context provided by the student is as follows (it may be empty): "+context;
-                const fullPrompt = persona+"\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n"+conversationHistory+"\nStudent: "+prompt+"\nNow respond as Bruno.";
-                
-                // Send flush signal first.
-                const command = {
-                            command: 'flush_buffer'
-                        };
-                socket.send(JSON.stringify(command));
-
-                // Fetch the API endpoint
-                fetch(`/api/llm/?session_transcript_id=${session_transcript_id}&prompt_for_llm=${encodeURIComponent(fullPrompt)}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then(response => response.json())
-                .then(data => {
-
-                    data.response_from_llm = data.response_from_llm.replace("Bruno: ", "").replace("Bruno (you): ", "");
-
-
-                    // Replace newline characters with <br> tags in both the prompt and the response
-                    const formattedPrompt = data.prompt_for_llm.replace(/\n/g, "<br>");
-                    const formattedResponse = data.response_from_llm.replace(/\n/g, "<br>");
-                    
-                    console.log(data.prompt_for_llm);
-                    console.log(data.response_from_llm);
-                    
-
-                    conversationHistory += `Student: ${prompt}\n`;
-                    conversationHistory += `Bruno (you): ${data.response_from_llm}\n`;
-                    conversationHistory += "\n"
-                    
-                    
-
-                    bruno_template = `<div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;"><div class="profile-photo" style="min-width: 38px; height: 35px; border-radius: 50%; background-color: orange; color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">B</div><div class="message-content" style="max-width: 95%;"><h5 class="message-author" style="font-weight: bold; margin-bottom: 0px;">Bruno AI</h5><p class="message-text" id="brunoResponse">${formattedResponse}</p></div></div>`
-
-                    // TODO add Back to the Top button
-
-                    document.getElementById('chatContents').innerHTML = document.getElementById('chatContents').innerHTML +
-                    bruno_template;
-
-                    scrollToBottomOfChat();
-
-
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    // Display the formatted JSON response
-                    document.getElementById('jsonResponse').innerHTML = 
-                        "Please enter a prompt first."
-                });
-                
-            });
-
-            // window.addEventListener('beforeunload', (event) => {
-            //         event.preventDefault();
-            //         event.returnValue = '';
-            //             const command = {
-            //                 command: 'flush_buffer'
-            //             };
-            //             socket.send(JSON.stringify(command));
-            //     });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-           })
-
-        </script>
-    </body>
-</html>
+                            // Get session_transcript_id somehow (you will need to implement this)
+                            const session_transcript_id = sessiondata.session_id_token;
+                            const context = document.getElementById('customContext').value;
+            
+                            const persona = "You are Bruno, an AI coach that gives feedback on the conversation in the transcript above. The context provided by the student is as follows (it may be empty): "+context;
+                            const fullPrompt = persona+"\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n"+conversationHistory+"\nStudent: "+prompt+"\nNow respond as Bruno.";
+                            
+                            // Send flush signal first.
+                            const command = {
+                                        command: 'flush_buffer'
+                                    };
+                            socket.send(JSON.stringify(command));
+            
+                            // Fetch the API endpoint
+                            fetch(`/api/llm/?session_transcript_id=${session_transcript_id}&prompt_for_llm=${encodeURIComponent(fullPrompt)}`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+            
+                                data.response_from_llm = data.response_from_llm.replace("Bruno: ", "").replace("Bruno (you): ", "");
+            
+            
+                                // Replace newline characters with <br> tags in both the prompt and the response
+                                const formattedPrompt = data.prompt_for_llm.replace(/\n/g, "<br>");
+                                const formattedResponse = data.response_from_llm.replace(/\n/g, "<br>");
+                                
+                                console.log(data.prompt_for_llm);
+                                console.log(data.response_from_llm);
+                                
+            
+                                conversationHistory += `Student: ${prompt}\n`;
+                                conversationHistory += `Bruno (you): ${data.response_from_llm}\n`;
+                                conversationHistory += "\n"
+                                
+                                
+            
+                                bruno_template = `<div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;"><div class="profile-photo" style="min-width: 38px; height: 35px; border-radius: 50%; background-color: orange; color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">B</div><div class="message-content" style="max-width: 95%;"><h5 class="message-author" style="font-weight: bold; margin-bottom: 0px;">Bruno AI</h5><p class="message-text" id="brunoResponse">${formattedResponse}</p></div></div>`
+            
+                                // TODO add Back to the Top button
+            
+                                document.getElementById('chatContents').innerHTML = document.getElementById('chatContents').innerHTML +
+                                bruno_template;
+            
+                                scrollToBottomOfChat();
+            
+            
+                            })
+                            .catch((error) => {
+                                console.error('Error:', error);
+                                // Display the formatted JSON response
+                                document.getElementById('jsonResponse').innerHTML = 
+                                    "Please enter a prompt first."
+                            });
+                            
+                        });
+            
+                        // window.addEventListener('beforeunload', (event) => {
+                        //         event.preventDefault();
+                        //         event.returnValue = '';
+                        //             const command = {
+                        //                 command: 'flush_buffer'
+                        //             };
+                        //             socket.send(JSON.stringify(command));
+                        //     });
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                       })
+            
+                    </script>
+                </body>
+            </html>
