@@ -1,20 +1,21 @@
-# Ai4collab
+# Ai4collab-Bruno
 
-## Ai4collab-backend Description of Features
+## What is Bruno?
 
-The ai4collab backend receives audio file input from a time interval on the frontend to create a transcript for the conversation, and allow the user to query a LLM with the transcript and a customizable prompt. 
 
-## Ai4collab-backend Description of Stack
+## How does Bruno work?
 
-The ai4collab backend is built with the django rest framework, a decision made due to Django's robust feature set, out of the box admin and security capabilities, and compatability with the existing project code written in python.
+The backend serves HTML frontend. After the user logs in with Google, they have access to live transcription through audio data passed through the backend to Deepgram (transcription API) and relayed back to the frontend. This transcript is also stored in the database, allowing the user to ask Bruno (GPT with custom prompts and transcript) questions about the conversation.
 
-The project also leverages Docker to normalize runtime environments and increase the ease of collaboration.
+## Description of Stack
 
-## Ai4collab-backend Release History
+The frontend is built with html and tailwindcss. The backend is built with the django rest framework, a decision made due to Django's robust feature set, out of the box admin and security capabilities, and compatability with the existing project code written in python. The project also leverages Docker to normalize runtime environments and increase the ease of collaboration.
+
+## Release History
 
 In development
 
-## Audio to Text Details
+### Audio to Text Details
 
 The application currently utilizes deepgram's live transcription and diarization. When the recording is paused, the websocket with the backend as a proxy to deepgram is still open, but no audio data is sent. The socket is kept alive using a keepAlive message sent to the BE then to Deepgram.
 
