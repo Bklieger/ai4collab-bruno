@@ -1,3 +1,12 @@
+"""
+consumers.py file for audio app. Define consumers for ai4collab project to enable 
+live transcription.
+
+Author(s): Benjamin Klieger
+Version: 1.0.0
+Date: 2023-10-26
+"""
+
 #------- [Import Libraries] -------#
 
 # Django and channels
@@ -25,6 +34,7 @@ DEEPGRAM_API_KEY = settings.DEEPGRAM_API_KEY
 
 #------- [Define Consumers Below] -------#
 
+# Consumer for live transcription
 class TranscriptConsumer(AsyncWebsocketConsumer):
     dg_client = Deepgram(DEEPGRAM_API_KEY)
 

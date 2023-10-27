@@ -1,11 +1,23 @@
-from django.core.management.base import BaseCommand, CommandError
-import os
+"""
+Env.py file for ai4collab app. This file defines a custom 
+command that will allow the user to check with deployment 
+environment they are currently using.
 
+Author(s): Benjamin Klieger
+Version: 1.0.0
+Date: 2023-10-26
+"""
+
+# Import required libraries
+from django.core.management.base import BaseCommand, CommandError
+import os # For checking the environment variable
+
+# Define the command
 class Command(BaseCommand):
+    # Help message for the command
     help = 'Command to view the current deployment environment'
 
     def handle(self, *args, **options):
-
         #From Settings.py, Should be Kept Identical
         # ------------- [Deployment Environment] -------------
         
