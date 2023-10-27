@@ -1,6 +1,5 @@
 """
 urls.py file for llm app.
-live transcription.
 
 Author(s): Benjamin Klieger
 Version: 1.0.0
