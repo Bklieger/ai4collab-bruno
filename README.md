@@ -23,7 +23,7 @@ The application currently utilizes deepgram's live transcription and diarization
 
 # Instructions to Run
 
-## Instructions with Docker
+## With Docker
 
 ### To build the docker image
 ~~~
@@ -37,7 +37,9 @@ docker run --env-file {DEPLOYMENT}.env -p 8000:8000 ai4collab:latest
 DEPLOYMENT = local, development, or production. Run with -d for detached.
 
 
-## Instructions without Docker
+
+
+## Without Docker
 
 ### To create virtual env
 ~~~
