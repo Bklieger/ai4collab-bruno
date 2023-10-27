@@ -36,7 +36,7 @@ docker run --env-file {DEPLOYMENT}.env -p 8000:8000 ai4collab:latest
 ~~~
 DEPLOYMENT = local, development, or production. Run with -d for detached.
 
-
+The application is now up and running!
 
 
 ## Without Docker
