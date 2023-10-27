@@ -19,7 +19,9 @@ In development
 
 The application currently utilizes deepgram's live transcription and diarization. When the recording is paused, the websocket with the backend as a proxy to deepgram is still open, but no audio data is sent. The socket is kept alive using a keepAlive message sent to the BE then to Deepgram.
 
-## Ai4collab-backend Instructions to Run
+---
+
+# Instructions to Run
 
 ## Instructions with Docker
 
@@ -35,7 +37,7 @@ docker run --env-file {DEPLOYMENT}.env -p 8000:8000 ai4collab:latest
 DEPLOYMENT = local, development, or production. Run with -d for detached.
 
 
-# Instructions without Docker
+## Instructions without Docker
 
 ### To create virtual env
 ~~~
