@@ -15,10 +15,6 @@ The frontend is built with html and tailwindcss. The backend is built with the d
 
 In development
 
-### Audio to Text Details
-
-The application currently utilizes deepgram's live transcription and diarization. When the recording is paused, the websocket with the backend as a proxy to deepgram is still open, but no audio data is sent. The socket is kept alive using a keepAlive message sent to the BE then to Deepgram.
-
 ---
 
 # Instructions to Run
