@@ -22,7 +22,7 @@ GNU General Public License v3.0 or later
 
 Contributors are able to contribute to the original codebase or create a forked open-source version. We request that you include [Principles.md](Principles.md) in any derivation of the codebase.
 
-See [COPYING](COPYING) to see the full text.
+See [COPYING](COPYING) to view the full text.
 
 ---
 
@@ -37,72 +37,114 @@ Before you can deploy the application, you must first set your environment varia
 
 For deploying the application locally, the following environment variables are required:
 
+
 ------- [local.env] --------
+
 DEPLOYMENT=local
+
 DJANGO_SETTINGS_MODULE=ai4collab.settings
+
 DEEPGRAM_API_KEY=<add here>
+
 MIDDLESIGHT_API_KEY=<add here> or OPENAI_API_KEY=<add here>
+
 GOOGLE_CLIENT_ID=<add here>
+
 GOOGLE_SECRET_KEY=<add here>
+
 
 
 For deploying the application to a development environment, the following environment variables are required:
 
+
 ------- [development.env] --------
+
 DEPLOYMENT=development
+
 DJANGO_SETTINGS_MODULE=ai4collab.settings
+
 SECRET_KEY=<add here>
+
 PSQL_DATABASE_URL=<add here>
+
 ALLOWED_HOSTS=<add here>
+
 DEEPGRAM_API_KEY=<add here>
+
 MIDDLESIGHT_API_KEY=<add here> or OPENAI_API_KEY=<add here>
+
 GOOGLE_CLIENT_ID=<add here>
+
 GOOGLE_SECRET_KEY=<add here>
+
 
 
 Finally, deploying the application to a production environment reqires the following environment variables:
 
+
 ------- [production.env] --------
+
 DEPLOYMENT=production
+
 DJANGO_SETTINGS_MODULE=ai4collab.settings
+
 SECRET_KEY=<add here>
+
 PSQL_DATABASE_URL=<add here>
+
 ALLOWED_HOSTS=<add here>
+
 DEEPGRAM_API_KEY=<add here>
+
 MIDDLESIGHT_API_KEY=<add here> or OPENAI_API_KEY=<add here>
+
 GOOGLE_CLIENT_ID=<add here>
+
 GOOGLE_SECRET_KEY=<add here>
+
 
 
 After selecting your deployment environment, the list of environment variables functions as a to-do list for setting up the project. Below are instructions for each variable.
 
 
+
 The DEPLOYMENT variable is required for all deployments and is self explanatory; It can be set to local, development, or production.
+
 
 The DJANGO_SETTINGS_MODULE variable is required for all deployments and does not need to be customized. It should be set to ai4collab.settings.
 
+
 The SECRET_KEY variable is required only for development and production deployments, as a hard-coded insecure key is used for local. The secret key is a requirement of Django applications and used for security. The key is typically 50 characters long, with a diverse set of letters, digits, and special characters. There are several generators that can be found online, or you can generate one by running the following command:
+
 
 ~~~
 python -c 'import secrets; print(secrets.token_urlsafe(38))'
 ~~~
 
+
 The PSQL_DATABASE_URL variable is required only for development and production deployments, as local deployment uses an SQLite database. PSQL_DATABASE_URL should include a PostgreSQL database with the username, password, host, port, and database name in the URL.
+
 
 The ALLOWED_HOSTS variable is a comma-seperated list of strings representing the allowed hosts for the Django app. This is required only for development and production deployments, as allowed hosts is set to "*" in local. An example for development is the following: ALLOWED_HOSTS=localhost,127.0.0.1,exampledev.railway.app
 
+
 The DEEPGRAM_API_KEY variable is required for all deployments. It can be obtained by creating a free account on deepgram.com, which will issue your account free credits to start.
+
 
 The MIDDLESIGHT_API_KEY variable is used for a custom configuration of Bruno. Specifically, the live application uses Middlesight to enable error tracking and rate limits. However, an easier implementation is to use the OpenAI API directly. Therefore, MIDDLESIGHT_API_KEY *should be ignored* and replaced with OPENAI_API_KEY.
 
+
 The OPENAI_API_KEY variable is required for all deployments. It is the OpenAI API key used for powering Bruno. This is the only third-party API key for Bruno which may need payment information to activate.
+
 
 The GOOGLE_CLIENT_ID and GOOGLE_SECRET_KEY are required for all deployments. In order to configure Google Oauth, you may consult the following link: https://support.google.com/googleapi/answer/6158849?hl=en
 
 
+
 Once you have set all the variables in a file named {deployment}.env (e.g. local.env, development.env, production.env), you can move to the next step. Using docker is recommended, but instructions for deployment without docker are included.
 
-## With Docker
+
+## Run With Docker
 
 ### To build the docker image
 ~~~
@@ -118,7 +160,7 @@ DEPLOYMENT = local, development, or production. Run with -d for detached.
 The application is now up and running!
 
 
-## Without Docker
+## Run Without Docker
 
 ### To create virtual env
 ~~~
