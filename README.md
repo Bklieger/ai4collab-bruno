@@ -12,6 +12,12 @@ The backend serves HTML frontend. After the user logs in with Google, they have 
 
 The frontend is built with html and tailwindcss. The backend is built with the django rest framework, a decision made due to Django's robust feature set, out of the box admin and security capabilities, and compatability with the existing project code written in python. The project also leverages Docker to normalize runtime environments and increase the ease of collaboration.
 
+## Contributing
+
+
+If you're interested in developing a specialized version of Bruno, we encourage you to fork this repository and implement your changes there. However, if you have ideas or contributions that could broadly enhance Bruno's functionality, please read our [contribution guidelines](CONTRIBUTING.md) for more information on how you can contribute to this repository. We greatly appreciate your involvement and input!
+
+
 ## Release History
 
 v1.0.0 - October 26th, 2023. First open-source stable version.
