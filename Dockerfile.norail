@@ -1,3 +1,7 @@
+# This Dockerfile is configured for general deployment.
+
+#------- [Base] -------#
+
 # Use the lightweight Python 3.8-slim base image
 FROM python:3.8-slim
 
@@ -24,7 +28,7 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 
-# ------- [Non-railway] -------
+# ------- [Non-Railway Specific] -------
 
 # Expose the default Gunicorn port
 EXPOSE 8000

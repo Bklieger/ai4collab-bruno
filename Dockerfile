@@ -1,3 +1,8 @@
+# This Dockerfile is configured specifically for 
+# deploying to Railway.app, an infrastructure platform.
+
+#------- [Base] -------#
+
 # Use the lightweight Python 3.8-slim base image
 FROM python:3.8-slim
 
@@ -24,7 +29,7 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 
-# ------- [Railway] -------
+#------- [Railway Specific] -------#
 
 # Copy the entrypoint script
 COPY railway.entrypoint.sh .

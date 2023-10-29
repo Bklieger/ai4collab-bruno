@@ -1,69 +1,10 @@
 """
-Django settings for ai4collab project.
+settings.py file for ai4collab app.
 
-Environment Variables:
-    - GOOGLE_CLIENT_ID: A string representing the Google OAuth2 client ID.
-        [Environment variable in: local, development, production]
-    - GOOGLE_CLIENT_SECRET: A string representing the Google OAuth2 client secret.
-        [Environment variable in: local, development, production]
-    - DJANGO_SETTINGS_MODULE: Required for running, always ai4collab.settings
-        [Environment variable in: local, development, production (all)]
-    - DEPLOYMENT: A string representing the deployment environment.
-        [Options: local, development, production]
-    - SECRET_KEY: A secret key for the Django project.
-        [Environment variable in: production]
-    - DEBUG: A boolean value for whether or not to run in debug mode.
-    - ALLOWED_HOSTS: A list of strings representing the allowed hosts.
-        [Environment variable in: development, production]
-    - PSQL_DATABASE_URL: A string representing the database URL.
-        [Environment variable in: development, production]
-    - DEEPGRAM_API_KEY: A string representing the Deepgram API key.
-        [Environment variable in: local, development, production]
-    - MIDDLESIGHT_API_KEY: A string representing the Middlesight API key.
-        [Environment variable in: local, development, production]
-
-Requirements for each deployment environment:
-    Local: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required. DEPLOYMENT recommended.
-    Development: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
-    Production: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY required.
-
-
-------- [local.env] --------
-DEPLOYMENT=local
-DJANGO_SETTINGS_MODULE=ai4collab.settings
-DEEPGRAM_API_KEY=<add here>
-MIDDLESIGHT_API_KEY=<add here>
-GOOGLE_CLIENT_ID=<add here>
-GOOGLE_SECRET_KEY=<add here>
-
-------- [development.env] --------
-DEPLOYMENT=development
-DJANGO_SETTINGS_MODULE=ai4collab.settings
-SECRET_KEY=<add here>
-PSQL_DATABASE_URL=<add here>
-ALLOWED_HOSTS=<add here>
-DEEPGRAM_API_KEY=<add here>
-MIDDLESIGHT_API_KEY=<add here>
-GOOGLE_CLIENT_ID=<add here>
-GOOGLE_SECRET_KEY=<add here>
-
-------- [production.env] --------
-DEPLOYMENT=production
-DJANGO_SETTINGS_MODULE=ai4collab.settings
-SECRET_KEY=<add here>
-PSQL_DATABASE_URL=<add here>
-ALLOWED_HOSTS=<add here>
-DEEPGRAM_API_KEY=<add here>
-MIDDLESIGHT_API_KEY=<add here>
-GOOGLE_CLIENT_ID=<add here>
-GOOGLE_SECRET_KEY=<add here>
-
-------- [instructions] -------
-1. Create and fill env file
-2. RUN export $(cat {deployment}.env | xargs)
-
+Author(s): Benjamin Klieger
+Version: 1.0.0
+Date: 2023-10-26
 """
-
 
 # ------------- [Import Libraries] -------------
 
@@ -101,7 +42,9 @@ The following environment variables are used as API keys for 3rd party applicati
 Requirements:
     - DEEPGRAM_API_KEY: A string representing the Deepgram API key.
         [Environment variable in: local, development, production]
-    - MIDDLESIGHT_API_KEY: A string representing the Middlesight API key.
+    - MIDDLESIGHT_API_KEY: A string representing the Middlesight API key. [Or OPENAI_API_KEY]
+        [Environment variable in: local, development, production]
+    - OPENAI_API_KEY: A string representing the OpenAI API key. [Or MIDDLESIGHT_API_KEY]
         [Environment variable in: local, development, production]
 """
 
@@ -117,16 +60,34 @@ elif len(DEEPGRAM_API_KEY)<3:
     critical_warnings_exist = True
 
 
-# Middlesight API key
-MIDDLESIGHT_API_KEY = os.environ.get("MIDDLESIGHT_API_KEY")
+# Middlesight API key or OpenAI API key
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
-if MIDDLESIGHT_API_KEY==None:
-    running_deployment_transcript+= red_critical(f'[Critical] MIDDLESIGHT_API_KEY environment variable not set. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
-    critical_warnings_exist = True
+if OPENAI_API_KEY==None:
 
-elif len(MIDDLESIGHT_API_KEY)<3:
-    running_deployment_transcript+= red_critical(f'[Critical] MIDDLESIGHT_API_KEY environment variable is invalid (<3 chars). (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
-    critical_warnings_exist = True
+    MIDDLESIGHT_API_KEY = os.environ.get("MIDDLESIGHT_API_KEY")
+
+    if MIDDLESIGHT_API_KEY==None:
+        running_deployment_transcript+= red_critical(f'[Critical] MIDDLESIGHT_API_KEY environment variable not set. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+        critical_warnings_exist = True
+
+    elif len(MIDDLESIGHT_API_KEY)<3:
+        running_deployment_transcript+= red_critical(f'[Critical] MIDDLESIGHT_API_KEY environment variable is invalid (<3 chars). (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+        critical_warnings_exist = True
+
+    # Print notice of using Middlesight instead of OpenAI.
+    print(green_success(f'Using Middlesight proxy instead of OpenAI directly.'))
+
+else:
+    MIDDLESIGHT_API_KEY = None
+
+    if OPENAI_API_KEY==None:
+        running_deployment_transcript+= red_critical(f'[Critical] OPENAI_API_KEY environment variable not set. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+        critical_warnings_exist = True
+
+    elif len(OPENAI_API_KEY)<3:
+        running_deployment_transcript+= red_critical(f'[Critical] OPENAI_API_KEY environment variable is invalid (<3 chars). (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+        critical_warnings_exist = True
 
 
 # ------------- [Environment Variables for Django App] -------------
@@ -224,16 +185,13 @@ else: # Development, staging, and production
             critical_warnings_exist = True
 
 
-
 """
 Set CSRF_TRUSTED_ORIGINS based upon ALLOWED_HOSTS. Can change in the future.
 """
 
-# Hard code change later
+# Hard coded, can be changed later
 if DEPLOYMENT != 'local':
     CSRF_TRUSTED_ORIGINS=["https://ai4collab.up.railway.app", "https://www.ai4collab.up.railway.app","https://localhost:8080"]
-    # for allowed_host in ALLOWED_HOSTS:
-    #     CSRF_TRUSTED_ORIGINS.append("https://"+allowed_host)
 
 
 """
@@ -266,7 +224,6 @@ elif DEPLOYMENT == 'development' or DEPLOYMENT == 'production':
 
 
 
-
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
@@ -275,8 +232,6 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-
-
 
 
 
@@ -323,18 +278,19 @@ AUTHENTICATION_BACKENDS = [
 
 ]
 
+# Define email settings
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
+# Define redirect and login urls
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
 
-
+# Secure HTTP in production
 if DEPLOYMENT != 'local' and DEPLOYMENT != 'development':
     ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
-
-
+# Use Custom User Model
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 REST_AUTH = {
@@ -353,6 +309,9 @@ REST_FRAMEWORK = {
 }
 
 
+"""
+The following are useful for integrating a seperate frontend with the Django backend.
+"""
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -365,10 +324,11 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 
-
 CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
 
+
+# Middleware
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -410,16 +370,6 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
-
-#TODO: deploy better setup for production
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': [('localhost', 6379)],
-#         },
-#     },
-# }
 
 
 

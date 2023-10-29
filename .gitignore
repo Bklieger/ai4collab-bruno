@@ -1,14 +1,18 @@
 #Base template: https://djangowaves.com/tips-tricks/gitignore-for-a-django-project/
 
-# Custom #
+#-------- [Custom] -------#
 
 # Allows archive folder
 archive
 
 # Opinionated ignore. Both pros and cons to this. 
-# However, removing and not running collect static might cause files to be missing in production if they are in the gitignore. 
-# In addition, removing would add potentially unnecessary files to the repo. Thus, it has been kept.
+# However, removing and not running collect static may cause files to be missing in production if they are in the gitignore. 
+# In addition, removing staticfiles from .gitignore would add potentially unnecessary files to the repo.
 staticfiles
+
+#------- [End Custom] -------#
+
+
 
 # Remove DS Store files
 .DS_Store
