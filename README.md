@@ -129,7 +129,7 @@ The OPENAI_API_KEY variable is required for all deployments. It is the OpenAI AP
 
 #### GOOGLE_CLIENT_ID and GOOGLE_SECRET_KEY
 
-The GOOGLE_CLIENT_ID and GOOGLE_SECRET_KEY are required for all deployments. In order to configure Google Oauth, you may consult the following link: https://support.google.com/googleapi/answer/6158849?hl=en
+The GOOGLE_CLIENT_ID and GOOGLE_SECRET_KEY are required for all deployments. In order to configure Google Oauth, you may consult the following link: https://support.google.com/googleapi/answer/6158849?hl=en. Authorized JavaScript origins for local deployment should include "http://127.0.0.1:8000". Authorized redirect URIs for local deployment should include "http://127.0.0.1:8000/allauth/google/login/callback/". For development and production deployments, "http://127.0.0.1:8000/" should be replaced with deployment URL.
 
 
 ### Next Steps
