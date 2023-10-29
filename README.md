@@ -41,17 +41,12 @@ For deploying the application locally, the following environment variables are r
 
 ------- [local.env] --------
 
-DEPLOYMENT=local
-
-DJANGO_SETTINGS_MODULE=ai4collab.settings
-
-DEEPGRAM_API_KEY=<add here>
-
-MIDDLESIGHT_API_KEY=<add here> or OPENAI_API_KEY=<add here>
-
-GOOGLE_CLIENT_ID=<add here>
-
-GOOGLE_SECRET_KEY=<add here>
+DEPLOYMENT=local  
+DJANGO_SETTINGS_MODULE=ai4collab.settings  
+DEEPGRAM_API_KEY=\<add here\>  
+MIDDLESIGHT_API_KEY=\<add here\> or OPENAI_API_KEY=\<add here\>  
+GOOGLE_CLIENT_ID=\<add here\>  
+GOOGLE_SECRET_KEY=\<add here\>  
 
 ### Deployment Deployment
 
@@ -88,6 +83,7 @@ MIDDLESIGHT_API_KEY=\<add here\> or OPENAI_API_KEY=\<add here\>
 GOOGLE_CLIENT_ID=\<add here\>  
 GOOGLE_SECRET_KEY=\<add here\>  
 
+---
 
 ### Descriptions of Variables
 
@@ -136,7 +132,7 @@ The OPENAI_API_KEY variable is required for all deployments. It is the OpenAI AP
 The GOOGLE_CLIENT_ID and GOOGLE_SECRET_KEY are required for all deployments. In order to configure Google Oauth, you may consult the following link: https://support.google.com/googleapi/answer/6158849?hl=en
 
 
-#### Next Steps
+### Next Steps
 
 Once you have set all the variables in a file named {deployment}.env (e.g. local.env, development.env, production.env), you can move to the next step. Using docker is recommended, but instructions for deployment without docker are included.
 
