@@ -20,7 +20,9 @@
     {% endif %}
 
     <div class="mt-4">
-        <p>{{ running_deployment_transcript }}</p>
+    {% for log in running_deployment_transcript %}
+        <p>{{ log }}</p>
+    {% endfor %}
     </div>
 </body>
 
