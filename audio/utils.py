@@ -8,7 +8,7 @@ Date: 2023-10-26
 
 # Used in Consumers.py. Return empty string if string is None, 
 # otherwise return original string.
-def empty_string_if_none(string: string) -> string:
+def empty_string_if_none(string: str) -> str:
     """
     Return empty string if string is None, otherwise return original string.
 
