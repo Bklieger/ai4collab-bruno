@@ -95,3 +95,15 @@ gunicorn --bind 0.0.0.0:8000 --workers 4 -k uvicorn.workers.UvicornWorker ai4col
 ~~~
 
 The application is now up and running!
+
+
+---
+
+
+## License
+
+GNU General Public License v3.0 or later
+
+Contributors are able to contribute to the original codebase or create a forked open-source version. We request that you include [Principles.md)](Principles.md) in any derivation of the codebase.
+
+See [COPYING](COPYING) to see the full text.
