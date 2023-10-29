@@ -4,7 +4,7 @@ Last Updated: October 26th, 2023
 
 ## Introduction
 
-Welcome to Bruno! We are excited to have you as part of our community and look forward to your contributions. This document provides guidelines for contributing to our project. By participating in this project, you agree to abide by its terms.
+Welcome to Bruno! This document provides guidelines for contributing to our project. By participating in this project, you agree to abide by its terms.
 
 
 ## How to Contribute
@@ -14,7 +14,6 @@ Contributions to Bruno can be made in various forms. Some of the ways you can co
 1. Submitting bug reports and feature requests  
 2. Writing code for new features or bug fixes  
 3. Improving documentation  
-4. Reviewing Pull Requests  
 
 
 ## Getting Started
@@ -28,8 +27,8 @@ Contributions to Bruno can be made in various forms. Some of the ways you can co
 
 When contributing code, please keep the following in mind:
 
-1. Code Style: Ensure your code adheres to the style guidelines of the project.
-2. Testing: Add unit tests or update existing tests as necessary.
+1. Code Style: Maintain the chosen technology stack. Write code in a similar style as the existing code, including headers and comments.
+2. Testing: If present, add unit tests or update existing tests as necessary.
 3. Documentation: Update the documentation, the README, or other relevant documentation accordingly.
 
 
@@ -46,7 +45,7 @@ Before submitting a Pull Request (PR), ensure the following:
 
 ## Review Process
 
-Once you submit a PR, the project maintainers will review your changes. The review process might include suggestions for improvements or requests for changes. Be open to feedback and willing to make the necessary adjustments.
+Once you submit a PR, the project maintainers will review your changes. The review process might include suggestions for improvements or requests for changes.
 
 
 ## Reporting Issues
