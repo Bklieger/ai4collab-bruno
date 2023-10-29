@@ -6,6 +6,8 @@ Version: 1.0.0
 Date: 2023-10-26
 """
 
+#------- [Import Libraries] -------#
+
 # Django imports
 from django.shortcuts import render
 from rest_framework.views import APIView
@@ -19,6 +21,8 @@ from audio.models import SessionTranscript
 # Import util function of LLM API
 from .utils import get_llm_feedback
 
+
+#------- [Define Views] -------#
 
 @method_decorator(login_required, name='dispatch')
 class LlmView(APIView):

@@ -1,6 +1,6 @@
 #Base template: https://djangowaves.com/tips-tricks/gitignore-for-a-django-project/
 
-# ---- [Custom] -----
+#-------- [Custom] -------#
 
 # Allows archive folder
 archive
@@ -10,7 +10,7 @@ archive
 # In addition, removing staticfiles from .gitignore would add potentially unnecessary files to the repo.
 staticfiles
 
-# ---- [End Custom] ----
+#------- [End Custom] -------#
 
 
 

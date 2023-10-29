@@ -4,7 +4,7 @@ Last Updated: October 26th, 2023
 
 ## Introduction
 
-Welcome to Bruno! This document provides guidelines for contributing to our project. By participating in this project, you agree to abide by its terms.
+Welcome to Bruno! This document provides guidelines for contributing to the project. By participating in this project, you agree to abide by its terms.
 
 
 ## How to Contribute
@@ -30,6 +30,7 @@ When contributing code, please keep the following in mind:
 1. Code Style: Maintain the chosen technology stack. Write code in a similar style as the existing code, including headers and comments.
 2. Testing: If present, add unit tests or update existing tests as necessary.
 3. Documentation: Update the documentation, the README, or other relevant documentation accordingly.
+4. Attribution: Each code file includes a list of authors. Consider adding your name to this list if you make modifications. While this is not mandatory, it helps acknowledge your contributions.
 
 
 ## Submitting a Pull Request

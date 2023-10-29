@@ -6,10 +6,15 @@ Version: 1.0.0
 Date: 2023-10-26
 """
 
+#------- [Import Libraries] -------#
+
 # Import Django Modules
 from django.db import models
 from accounts.models import CustomUser
 import uuid
+
+
+#------- [Models] -------#
 
 # Websocket Token (Warning, this acts as auth for user with limited permissions)
 class WebsocketToken(models.Model):

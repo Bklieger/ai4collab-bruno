@@ -1,12 +1,13 @@
 """
-global_utils.py file for ai4collab app. Global util functions for ai4collab project.
+global_utils.py file for ai4collab app. Global util 
+functions for the ai4collab project.
 
 Author(s): Benjamin Klieger
 Version: 1.0.0
 Date: 2023-10-26
 """
 
-# ------------- [Functions] -------------
+#------- [Functions] -------#
 
 # Function to format message to green with prefix newline.
 def green_success(message: str) -> str:

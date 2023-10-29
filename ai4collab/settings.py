@@ -309,6 +309,9 @@ REST_FRAMEWORK = {
 }
 
 
+"""
+The following are useful for integrating a seperate frontend with the Django backend.
+"""
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -321,10 +324,11 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
 
-
 CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
 
+
+# Middleware
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -366,16 +370,6 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
-
-#TODO: deploy better setup for production
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#         'CONFIG': {
-#             'hosts': [('localhost', 6379)],
-#         },
-#     },
-# }
 
 
 
