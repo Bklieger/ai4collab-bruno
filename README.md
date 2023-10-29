@@ -156,7 +156,7 @@ docker run --env-file {DEPLOYMENT}.env -p 8000:8000 ai4collab:latest
 ~~~
 DEPLOYMENT = local, development, or production. Run with -d for detached.
 
-The application is now up and running!
+The application is now up and running! You can check the status of the deployment for any errors in the logs.
 
 
 ## Run Without Docker
@@ -218,5 +218,6 @@ uvicorn ai4collab.asgi:application
 gunicorn --bind 0.0.0.0:8000 --workers 4 -k uvicorn.workers.UvicornWorker ai4collab.asgi:application
 ~~~
 
-The application is now up and running!
+The application is now up and running! 
 
+You can check the status of the deployment for any errors in the logs, or visit /deployment while logged in as a superadmin through the admin panel at /admin.
