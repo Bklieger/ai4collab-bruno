@@ -138,7 +138,7 @@ if DEPLOYMENT == 'local':
 else: # Development and production
     SECRET_KEY = os.environ.get('SECRET_KEY')
     # Check if valid
-    if SECRET_KEY == None or len(SECRET_KEY) < 50: # if invalid
+    if SECRET_KEY == None or len(SECRET_KEY) < 30: # if invalid
         running_deployment_transcript+= red_critical(f'[Critical] SECRET_KEY environment variable not set or is not sufficient in length. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
         critical_warnings_exist = True
 
