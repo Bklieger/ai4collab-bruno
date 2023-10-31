@@ -142,6 +142,7 @@ The GOOGLE_CLIENT_ID and GOOGLE_SECRET_KEY are required for all deployments. In 
 
 Once you have set all the variables in a file named {deployment}.env (e.g. local.env, development.env, production.env), you can move to the next step. Using docker is recommended, but instructions for deployment without docker are included.
 
+If you are deploying to production or development outside of localhost, you will need to modify settings.py to include the new URL under CSRF_TRUSTED_ORIGINS, and modify the url_to_use variable in audio/views.py.
 
 ## Run With Docker
 
