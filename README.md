@@ -74,7 +74,7 @@ GOOGLE_SECRET_KEY=\<add here\>
 
 ### Production Deployment
 
-Finally, deploying the application to a production environment reqires the following environment variables:
+Finally, deploying the application to a production environment requires the following environment variables:
 
 
 ------- [production.env] --------
