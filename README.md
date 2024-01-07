@@ -23,6 +23,9 @@ If you're interested in developing a specialized version of Bruno, we encourage 
 
 v1.0.0 - October 26th, 2023. First open-source stable version.
 
+v1.0.1 - January 6th, 2024. Full replacement of Middlesight with OpenAI 
+
+
 ## License
 
 GNU General Public License v3.0 or later

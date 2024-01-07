@@ -3,8 +3,8 @@ utils.py file for llm app. Define request to LLM API for
 chat with Bruno.
 
 Author(s): Benjamin Klieger
-Version: 1.0.0
-Date: 2023-10-26
+Version: 1.0.1
+Date: 2024-01-06
 """
 
 #------- [Import Libraries] -------#
