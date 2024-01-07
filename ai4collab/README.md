@@ -23,23 +23,21 @@ Environment Variables:
         [Environment variable in: development, production]  
     - DEEPGRAM_API_KEY: A string representing the Deepgram API key.  
         [Environment variable in: local, development, production]  
-    - MIDDLESIGHT_API_KEY: A string representing the Middlesight API key.  
-        [Environment variable in: local, development, production]  
     - OPENAI_API_KEY: A string representing the OpenAI API key.  
         [Environment variable in: local, development, production]  
 
 
 Requirements for each deployment environment:  
-    Local: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY or OPENAI_API_KEY required. DEPLOYMENT recommended.  
-    Development: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY or OPENAI_API_KEY required.  
-    Production: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, MIDDLESIGHT_API_KEY or OPENAI_API_KEY required.  
+    Local: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEEPGRAM_API_KEY, OPENAI_API_KEY required. DEPLOYMENT recommended.  
+    Development: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, OPENAI_API_KEY required.  
+    Production: GOOGLE_CLIENT_ID, GOOGLE_SECRET_KEY, DJANGO_SETTINGS_MODULE, DEPLOYMENT, SECRET_KEY, PSQL_DATABASE_URL, ALLOWED_HOSTS, DEEPGRAM_API_KEY, OPENAI_API_KEY required.  
 
 
 ------- [local.env] --------  
 DEPLOYMENT=local  
 DJANGO_SETTINGS_MODULE=ai4collab.settings  
 DEEPGRAM_API_KEY=\<add here\>  
-MIDDLESIGHT_API_KEY=\<add here\> or OPENAI_API_KEY=\<add here\>  
+OPENAI_API_KEY=\<add here\>  
 GOOGLE_CLIENT_ID=\<add here\>  
 GOOGLE_SECRET_KEY=\<add here\>  
 
@@ -50,7 +48,7 @@ SECRET_KEY=\<add here\>
 PSQL_DATABASE_URL=\<add here\>  
 ALLOWED_HOSTS=\<add here\>  
 DEEPGRAM_API_KEY=\<add here\>  
-MIDDLESIGHT_API_KEY=\<add here\> or OPENAI_API_KEY=\<add here\>  
+OPENAI_API_KEY=\<add here\>  
 GOOGLE_CLIENT_ID=\<add here\>  
 GOOGLE_SECRET_KEY=\<add here\>  
 
@@ -61,6 +59,6 @@ SECRET_KEY=\<add here\>
 PSQL_DATABASE_URL=\<add here\>  
 ALLOWED_HOSTS=\<add here\>  
 DEEPGRAM_API_KEY=\<add here\>  
-MIDDLESIGHT_API_KEY=\<add here\> or OPENAI_API_KEY=\<add here\>  
+OPENAI_API_KEY=\<add here\>  
 GOOGLE_CLIENT_ID=\<add here\>  
 GOOGLE_SECRET_KEY=\<add here\>  

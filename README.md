@@ -51,7 +51,7 @@ For deploying the application locally, the following environment variables are r
 DEPLOYMENT=local  
 DJANGO_SETTINGS_MODULE=ai4collab.settings  
 DEEPGRAM_API_KEY=\<add here\>  
-MIDDLESIGHT_API_KEY=\<add here\> or OPENAI_API_KEY=\<add here\>  
+OPENAI_API_KEY=\<add here\>  
 GOOGLE_CLIENT_ID=\<add here\>  
 GOOGLE_SECRET_KEY=\<add here\>  
 
@@ -68,7 +68,7 @@ SECRET_KEY=\<add here\>
 PSQL_DATABASE_URL=\<add here\>  
 ALLOWED_HOSTS=\<add here\>  
 DEEPGRAM_API_KEY=\<add here\>  
-MIDDLESIGHT_API_KEY=\<add here\> or OPENAI_API_KEY=\<add here\>  
+OPENAI_API_KEY=\<add here\>  
 GOOGLE_CLIENT_ID=\<add here\>  
 GOOGLE_SECRET_KEY=\<add here\>  
 
@@ -86,7 +86,7 @@ SECRET_KEY=\<add here\>
 PSQL_DATABASE_URL=\<add here\>  
 ALLOWED_HOSTS=\<add here\>  
 DEEPGRAM_API_KEY=\<add here\>  
-MIDDLESIGHT_API_KEY=\<add here\> or OPENAI_API_KEY=\<add here\>  
+OPENAI_API_KEY=\<add here\>  
 GOOGLE_CLIENT_ID=\<add here\>  
 GOOGLE_SECRET_KEY=\<add here\>  
 
@@ -125,10 +125,6 @@ The ALLOWED_HOSTS variable is a comma-seperated list of strings representing the
 #### DEEPGRAM_API_KEY
 
 The DEEPGRAM_API_KEY variable is required for all deployments. It can be obtained by creating a free account on deepgram.com, which will issue your account free credits to start.
-
-#### MIDDLESIGHT_API_KEY
-
-The MIDDLESIGHT_API_KEY variable is used for a custom configuration of Bruno. Specifically, the live application uses Middlesight to enable error tracking and rate limits. However, an easier implementation is to use the OpenAI API directly. Therefore, MIDDLESIGHT_API_KEY *should be ignored* and replaced with OPENAI_API_KEY.
 
 #### OPENAI_API_KEY
 
