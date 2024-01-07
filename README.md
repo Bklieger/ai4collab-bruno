@@ -1,4 +1,5 @@
 # Ai4collab-Bruno
+![Bruno Screenshot](/assets/img/bruno-screenshot.png)
 
 ## What is Bruno?
 
