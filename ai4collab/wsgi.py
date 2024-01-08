@@ -9,7 +9,7 @@ For more information on this file, see
 https://docs.djangoproject.com/en/4.1/howto/deployment/wsgi/
 
 Author(s): Benjamin Klieger
-Version: 1.0.1
+Version: 1.1.0
 Date: 2024-01-07
 """
 

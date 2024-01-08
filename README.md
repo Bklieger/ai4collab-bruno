@@ -25,6 +25,8 @@ v1.0.0 - October 26th, 2023. First open-source stable version.
 
 v1.0.1 - January 6th, 2024. Full replacement of Middlesight with OpenAI 
 
+v1.1.0 - January 7th, 2024. Ability to customize Bruno persona and prompt
+
 
 ## License
 
