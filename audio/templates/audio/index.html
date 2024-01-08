@@ -68,9 +68,21 @@
         </div>
 
         <!-- Settings panel -->
-        <div id="settings-panel" class="settings-panel hidden"
+        <div id="settings-panel" class="settings-panel hidden" 
             style="position: fixed; bottom: 70px; right: 20px; background-color: white; border: 1px solid #ccc; padding: 20px; border-radius: 5px;">
-            <button id="toggleButton" class="toggle-button">Hide Transcript</button>
+
+            <!-- Set persona and custom prompt text areas -->
+            <div>
+                <label for="persona">Persona:</label>
+                <textarea id="persona" style="resize: none; width: 100%;" rows="3" class="border border-gray-300 rounded-md shadow-sm mt-2 px-3 py-2">You are Bruno, an AI coach that gives feedback on the conversation in the transcript above.</textarea>
+            </div>
+            <div style="margin-top: 10px;">
+                <label for="customPromptSettings">Custom Prompt:</label>
+                <textarea id="customPromptSettings" style="resize: none; width: 100%;" rows="3" class="border border-gray-300 rounded-md shadow-sm mt-2 px-3 py-2">Now respond as Bruno.</textarea>
+            </div>
+            
+            <!-- Hide transcript button -->
+            <button id="toggleButton" class="toggle-button" style="margin-top:20px;">Hide Transcript</button>
         </div>
 
 
@@ -434,9 +446,10 @@
                                 const session_transcript_id = sessiondata.session_id_token;
                                 const context = document.getElementById('customContext').value;
 
-                                // Custom prompt for Bruno. Can be modified from this file.
-                                const persona = "You are Bruno, an AI coach that gives feedback on the conversation in the transcript above. The context provided by the student is as follows (it may be empty): " + context;
-                                const fullPrompt = persona + "\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n" + conversationHistory + "\nStudent: " + prompt + "\nNow respond as Bruno.";
+
+                                const persona = document.getElementById('persona').value + " The context provided by the student is as follows (it may be empty): " + context;
+                                const fullPrompt = persona + "\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n" + conversationHistory + "\nStudent: " + prompt + "\n"+document.getElementById('customPromptSettings').value;
+
 
                                 // Send flush signal first.
                                 const command = {
