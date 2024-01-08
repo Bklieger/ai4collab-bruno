@@ -3,7 +3,7 @@ Urls.py file for accounts app.
 
 Author(s): Benjamin Klieger
 Version: 1.0.1
-Date: 2024-01-06
+Date: 2024-01-07
 """
 
 # Import required libraries for Google OAuth

@@ -3,7 +3,7 @@ utils.py file for audio app.
 
 Author(s): Benjamin Klieger
 Version: 1.0.1
-Date: 2024-01-06
+Date: 2024-01-07
 """
 
 #------- [Import Libraries] -------#
