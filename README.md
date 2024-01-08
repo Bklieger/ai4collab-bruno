@@ -230,3 +230,4 @@ You can make requests for new features under issues, or contribute code.
 Current list:
 - Ability to customize prompt
 - Add increased test coverage
+- Add account-specific rate limiting
