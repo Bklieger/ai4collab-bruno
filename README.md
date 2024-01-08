@@ -222,3 +222,11 @@ gunicorn --bind 0.0.0.0:8000 --workers 4 -k uvicorn.workers.UvicornWorker ai4col
 The application is now up and running! 
 
 You can check the status of the deployment for any errors in the logs, or visit /deployment while logged in as a superadmin through the admin panel at /admin.
+
+### Future features
+
+You can make requests for new features under issues, or contribute code.
+
+Current list:
+- Ability to customize prompt
+- Add increased test coverage
