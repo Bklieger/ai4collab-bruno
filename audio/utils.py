@@ -2,8 +2,8 @@
 utils.py file for audio app.
 
 Author(s): Benjamin Klieger
-Version: 1.0.1
-Date: 2024-01-06
+Version: 1.1.0
+Date: 2024-01-07
 """
 
 # Used in Consumers.py. Return empty string if string is None, 

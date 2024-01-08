@@ -7,11 +7,45 @@ Bruno is a speech-to-text-to-AI tool designed to facilitate collaborative learni
 
 ## How does Bruno work?
 
-The backend serves HTML frontend. After the user logs in with Google, they have access to live transcription through audio data passed through the backend to Deepgram (transcription API) and relayed back to the frontend. This transcript is also stored in the database, allowing the user to ask Bruno (GPT with custom prompts and transcript) questions about the conversation.
+First, you can log into the app with Google.
+
+![Google Screenshot](/assets/img/google.png)
+
+You will find a full dashboard with several features.
+
+![Full screen Screenshot](/assets/img/fullscreen.png)
+
+Next, you can click "record" to start the transcript, and pause at any time.
+
+![Record Screenshot](/assets/img/record.png)
+![Pause Screenshot](/assets/img/pause.png)
+
+The transcript with diarization of speakers will be created through Deepgram and displayed on the frontend.
+
+![Transcript Screenshot](/assets/img/transcript.png)
+
+You can enter context regarding the conversation and read the instructions for use of Bruno.
+
+![Instructions Screenshot](/assets/img/instructions.png)
+
+Finally, you can query Bruno by prompting and receiving a response to help facilitate your group collaboration.
+
+![Llm Screenshot](/assets/img/llm.png)
+
+You can customize the display, persona, and prompt at any time through the settings panel.
+
+![Settings Screenshot](/assets/img/settings.png)
+
+If at any time your connection has disconnected from the transcription service, you will see a warning.
+
+![Llm Screenshot](/assets/img/warning.png)
+
 
 ## Description of Stack
 
 The frontend is built with html and tailwindcss. The backend is built with the django rest framework, a decision made due to Django's robust feature set, out of the box admin and security capabilities, and compatability with the existing project code written in python. The project also leverages Docker to normalize runtime environments and increase the ease of collaboration.
+
+The backend serves HTML frontend. After the user logs in with Google, they have access to live transcription through audio data passed through the backend to Deepgram (transcription API) and relayed back to the frontend. This transcript is also stored in the database, allowing the user to ask Bruno (GPT with custom prompts and transcript) questions about the conversation.
 
 ## Contributing
 
@@ -24,6 +58,8 @@ If you're interested in developing a specialized version of Bruno, we encourage 
 v1.0.0 - October 26th, 2023. First open-source stable version.
 
 v1.0.1 - January 6th, 2024. Full replacement of Middlesight with OpenAI 
+
+v1.1.0 - January 7th, 2024. Ability to customize Bruno persona and prompt
 
 
 ## License
@@ -222,3 +258,12 @@ gunicorn --bind 0.0.0.0:8000 --workers 4 -k uvicorn.workers.UvicornWorker ai4col
 The application is now up and running! 
 
 You can check the status of the deployment for any errors in the logs, or visit /deployment while logged in as a superadmin through the admin panel at /admin.
+
+### Future features
+
+You can make requests for new features under issues, or contribute code.
+
+Current list:
+- Ability to customize prompt
+- Add increased test coverage
+- Add account-specific rate limiting
