@@ -17,12 +17,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-    <style>
-        /* Hide the boxes when they're empty */
-        .content-box:empty {
-            display: none;
-        }
-    </style>
 </head>
 
 <!-- Body -->
@@ -40,11 +34,6 @@
                {% block recording_button %}
                 <!-- Record button -->
                 {% endblock %}
-
-                <!-- Banner for connecting to server message-->
-                <span id="banner-style" class="banner text-center text-base">
-                    <p id="status" style="font-weight:600;padding:5px;">Connecting to server...</p>
-                </span>
                 
                 <!-- Overlay for offline Status -->
                 <div id="overlay"
