@@ -10,11 +10,12 @@ Date: 2024-01-07
 from django.urls import path
 
 # Import Views
-from .views import index, WebsocketTokenView, SessionTranscriptView
+from .views import dashboard, customTranscriptDashboard, WebsocketTokenView, SessionTranscriptView
 
 # Url Patterns
 urlpatterns = [
-    path('', index, name='index'), # Main interface
+    path('', dashboard, name='dashboard'), # Main interface
+    path('upload', customTranscriptDashboard, name='dashboard'), # Alternative interface
     path('api/token/', WebsocketTokenView.as_view(), name='token'), # Websocket token
     path('api/newsession/', SessionTranscriptView.as_view(), name='transcript'), # New session transcript
 ]

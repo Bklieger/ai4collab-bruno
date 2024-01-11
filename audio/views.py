@@ -29,7 +29,7 @@ DEPLOYMENT = settings.DEPLOYMENT
 
 # Login protected interface screen
 @login_required
-def index(request):
+def dashboard(request):
     # Determine URL to use depending on deployment
     if DEPLOYMENT != "production":
         url_to_use = "localhost:8000" # If hosting on different port, update this variable
@@ -39,6 +39,10 @@ def index(request):
         url_to_use = "wss://"+url_to_use
     return render(request, 'audio/index.html', {'url_to_use': url_to_use})
 
+# Login protected interface screen with custom transcript index
+@login_required
+def customTranscriptDashboard(request):
+    return render(request, 'audio/custom_transcript_index.html')
 
 @method_decorator(login_required, name='dispatch')
 class WebsocketTokenView(APIView):
