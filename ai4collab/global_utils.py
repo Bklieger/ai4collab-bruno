@@ -4,7 +4,7 @@ functions for the ai4collab project.
 
 Author(s): Benjamin Klieger
 Version: 1.1.0
-Date: 2024-01-07
+Date: 2024-01-11
 """
 
 #------- [Functions] -------#

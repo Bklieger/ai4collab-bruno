@@ -5,7 +5,7 @@ environment they are currently using.
 
 Author(s): Benjamin Klieger
 Version: 1.1.0
-Date: 2024-01-07
+Date: 2024-01-11
 """
 
 # Import required libraries
