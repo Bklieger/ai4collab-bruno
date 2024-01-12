@@ -28,7 +28,7 @@
 <!-- Transcript -->
 <div class="p-4 flex-grow text-base" id="transcript-div">
     Transcript
-    <textarea id="text-box" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" maxlength="1000" placeholder="Upload the transcript (.txt only), and it will appear here. Or, manually copy and paste into this box." style="width:100%;height:275px;margin-bottom:10px;"></textarea>
+    <textarea id="text-box" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" maxlength="20000" placeholder="Upload the transcript (.txt only), and it will appear here. Or, manually copy and paste into this box." style="width:100%;height:275px;margin-bottom:10px;"></textarea>
     </div>
 
 {% endblock %}
@@ -114,8 +114,6 @@
             // Button event listener
             document.getElementById('askLLMButton').addEventListener('click', () => {
 
-                // Important: Flush the buffer before sending the prompt. This will update the transcript on the backend with the latest transcript data.
-                socket.send(JSON.stringify({ command: 'flush_buffer' }));
 
                 // Get the value of the input field
                 const prompt = document.getElementById('customPrompt').value;
@@ -136,54 +134,54 @@
 
                 scrollToBottomOfChat();
 
-                const session_transcript_id = sessiondata.session_id_token;
                 const context = document.getElementById('customContext').value;
 
 
                 const persona = document.getElementById('persona').value + " The context provided by the student is as follows (it may be empty): " + context;
-                const fullPrompt = persona + "\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n" + conversationHistory + "\nStudent: " + prompt + "\n"+document.getElementById('customPromptSettings').value;
+                const fullPrompt = persona + "\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n" + conversationHistory + "\nStudent: " + prompt + "\n\n"+document.getElementById('customPromptSettings').value;
 
 
+                // Get transcript content from the text box
+                const transcript = document.getElementById('text-box').value;
 
-                // Fetch the API endpoint
-            //     fetch(`/api/llm/?session_transcript_id=${session_transcript_id}&prompt_for_llm=${encodeURIComponent(fullPrompt)}`, {
-            //         method: 'GET',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //     })
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             data.response_from_llm = data.response_from_llm.replace("Bruno: ", "").replace("Bruno (you): ", "");
+                fetch(`/api/llm_only/?transcript=${encodeURIComponent(transcript)}&prompt_for_llm=${encodeURIComponent(fullPrompt)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        data.response_from_llm = data.response_from_llm.replace("Bruno: ", "").replace("Bruno (you): ", "");
 
-            //             // Replace newline characters with <br> tags in both the prompt and the response
-            //             const formattedPrompt = data.prompt_for_llm.replace(/\n/g, "<br>");
-            //             const formattedResponse = data.response_from_llm.replace(/\n/g, "<br>");
+                        // Replace newline characters with <br> tags in both the prompt and the response
+                        const formattedPrompt = data.prompt_for_llm.replace(/\n/g, "<br>");
+                        const formattedResponse = data.response_from_llm.replace(/\n/g, "<br>");
 
-            //             console.log(data.prompt_for_llm);
-            //             console.log(data.response_from_llm);
+                        console.log(data.prompt_for_llm);
+                        console.log(data.response_from_llm);
 
-            //             // Store conversation history
-            //             conversationHistory += `Student: ${prompt}\n`;
-            //             conversationHistory += `Bruno (you): ${data.response_from_llm}\n`;
-            //             conversationHistory += "\n"
+                        // Store conversation history
+                        conversationHistory += `Student: ${prompt}\n`;
+                        conversationHistory += `Bruno (you): ${data.response_from_llm}\n`;
+                        conversationHistory += "\n"
 
-            //             bruno_template = `<div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;"><div class="profile-photo" style="min-width: 38px; height: 35px; border-radius: 50%; background-color: orange; color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">B</div><div class="message-content" style="max-width: 95%;"><h5 class="message-author" style="font-weight: bold; margin-bottom: 0px;">Bruno AI</h5><p class="message-text" id="brunoResponse">${formattedResponse}</p></div></div>`
+                        bruno_template = `<div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;"><div class="profile-photo" style="min-width: 38px; height: 35px; border-radius: 50%; background-color: orange; color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">B</div><div class="message-content" style="max-width: 95%;"><h5 class="message-author" style="font-weight: bold; margin-bottom: 0px;">Bruno AI</h5><p class="message-text" id="brunoResponse">${formattedResponse}</p></div></div>`
 
-            //             document.getElementById('chatContents').innerHTML = document.getElementById('chatContents').innerHTML +
-            //                 bruno_template;
+                        document.getElementById('chatContents').innerHTML = document.getElementById('chatContents').innerHTML +
+                            bruno_template;
 
-            //             // On new message, scroll to bottom of chat
-            //             scrollToBottomOfChat();
-            //         })
-            //         .catch((error) => {
-            //             console.error('Error:', error);
-            //             // Display the formatted JSON response
-            //             document.getElementById('jsonResponse').innerHTML =
-            //                 "Please enter a prompt first."
-            //         });
+                        // On new message, scroll to bottom of chat
+                        scrollToBottomOfChat();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        // Display the formatted JSON response
+                        document.getElementById('jsonResponse').innerHTML =
+                            "Please enter a prompt first."
+                    });
 
-            // });
+            });
 
 
     </script>
