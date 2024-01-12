@@ -1,0 +1,188 @@
+<!-- 
+    index.html for audio app. 
+    Dashboard for Bruno.
+
+    Author(s): Benjamin Klieger
+    Version: 1.1.0
+    Date: 2024-01-11
+-->
+
+{% extends 'audio/base.html' %}
+
+
+{% block recording_button %}
+<!-- Upload button -->
+<button id="upload-button"
+    class="w-8 h-8 rounded-full flex items-center justify-center fas fa-upload"
+    onclick="document.getElementById('file-input').click()"></button>
+
+<!-- Hidden file input for actual file picking -->
+<input id="file-input" type="file" accept=".txt" style="display: none" onchange="loadFileContents()"/>
+
+<!-- Upload text -->
+<span class="upload-text" style="margin-top:5px;">Upload</span>
+{% endblock %}
+
+
+{% block transcript %}
+<!-- Transcript -->
+<div class="p-4 flex-grow text-base" id="transcript-div">
+    Transcript
+    <textarea id="text-box" class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box" maxlength="20000" placeholder="Upload the transcript (.txt only), and it will appear here. Or, manually copy and paste into this box." style="width:100%;height:275px;margin-bottom:10px;"></textarea>
+    </div>
+
+{% endblock %}
+
+
+{% block instructions %}
+<div class="p-4 h-full text-base">
+    Instructions
+    <div id=""
+        class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box"
+        style="max-height: 663px;min-height:663px;">
+
+        1. Provide context about your conversation in the field below.<br /><br />
+        <textarea style="resize: none;" id="customContext"
+            placeholder="What is your conversation about?" rows="4"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm"></textarea>
+        <br /><br />
+
+        2. Click the "upload" button at the top to upload a .txt file of the transcript or copy paste it into the text box.<br /><br />
+
+        3. Ask Bruno questions to get feedback:<br /><br />
+        <div style="font-size:14px;font-style:italic; padding-left:3px;">
+            How evenly distributed is our speaking time?<br />
+            Are we actively engaging with each other's ideas?<br />
+            Are there any instances of a speaker being <br />excluded from the conversation?<br />
+            How much of the conversation has been on topic?<br />
+            How well have we collaborated as a team?<br />
+            Has off topic conversation allowed us to better work together?<br />
+        </div>
+        <br />
+
+        4. Pause Bruno and edit the transcript as needed to improve accuracy.<br />
+
+        <!-- Sign out option -->
+        <div style="width:100%; align-items: right;">
+            <br>
+            You are signed in. <a href="/accounts/logout"
+                style="text-decoration: underline;">Logout</a>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+
+
+
+{% block main_javascript %}
+    <!-- Javascript for the transcription and Bruno functionality -->
+    <script>
+
+        function loadFileContents() {
+            const input = document.getElementById('file-input');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const textBox = document.getElementById('text-box');
+                    textBox.value = e.target.result;
+                }
+                reader.readAsText(input.files[0]);
+            }
+        }
+
+
+         // Scroll to bottom of chat
+         function scrollToBottomOfChat() {
+                var chatContents = document.getElementById("chatContents");
+                chatContents.scrollTop = chatContents.scrollHeight;
+            }
+
+            // Store conversation history
+            let conversationHistory = "";
+
+            // Restart button event listener
+            document.getElementById('restartButton').addEventListener('click', () => {
+                // Reset the conversation history
+                conversationHistory = "";
+                document.getElementById('chatContents').innerHTML = "";
+            });
+
+            // Button event listener
+            document.getElementById('askLLMButton').addEventListener('click', () => {
+
+
+                // Get the value of the input field
+                const prompt = document.getElementById('customPrompt').value;
+
+                you_template = `
+<div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;">
+<div class="profile-photo" style="min-width: 38px; height: 35px; border-radius: 50%; background-color: rgb(208, 208, 208); color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">U</div>
+<div class="message-content" style="max-width: 95%;">
+<h5 class="message-author" style="font-weight: bold; margin-bottom: 0px;">You</h5>
+<p class="message-text" id="brunoResponse">${prompt}</p>
+</div>
+</div>
+`
+                document.getElementById('customPrompt').value = "";
+
+                document.getElementById('chatContents').innerHTML = document.getElementById('chatContents').innerHTML +
+                    you_template;
+
+                scrollToBottomOfChat();
+
+                const context = document.getElementById('customContext').value;
+
+
+                const persona = document.getElementById('persona').value + " The context provided by the student is as follows (it may be empty): " + context;
+                const fullPrompt = persona + "\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n" + conversationHistory + "\nStudent: " + prompt + "\n\n"+document.getElementById('customPromptSettings').value;
+
+
+                // Get transcript content from the text box
+                const transcript = document.getElementById('text-box').value;
+
+                fetch(`/api/llm_only/?transcript=${encodeURIComponent(transcript)}&prompt_for_llm=${encodeURIComponent(fullPrompt)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        data.response_from_llm = data.response_from_llm.replace("Bruno: ", "").replace("Bruno (you): ", "");
+
+                        // Replace newline characters with <br> tags in both the prompt and the response
+                        const formattedPrompt = data.prompt_for_llm.replace(/\n/g, "<br>");
+                        const formattedResponse = data.response_from_llm.replace(/\n/g, "<br>");
+
+                        console.log(data.prompt_for_llm);
+                        console.log(data.response_from_llm);
+
+                        // Store conversation history
+                        conversationHistory += `Student: ${prompt}\n`;
+                        conversationHistory += `Bruno (you): ${data.response_from_llm}\n`;
+                        conversationHistory += "\n"
+
+                        bruno_template = `<div class="chat-message bruno-ai" style="display: flex; margin-bottom: 20px;"><div class="profile-photo" style="min-width: 38px; height: 35px; border-radius: 50%; background-color: orange; color: white; display: flex; align-items: center; justify-content: center; font-size: large; margin-right: 10px;margin-top:0px;">B</div><div class="message-content" style="max-width: 95%;"><h5 class="message-author" style="font-weight: bold; margin-bottom: 0px;">Bruno AI</h5><p class="message-text" id="brunoResponse">${formattedResponse}</p></div></div>`
+
+                        document.getElementById('chatContents').innerHTML = document.getElementById('chatContents').innerHTML +
+                            bruno_template;
+
+                        // On new message, scroll to bottom of chat
+                        scrollToBottomOfChat();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        // Display the formatted JSON response
+                        document.getElementById('jsonResponse').innerHTML =
+                            "Please enter a prompt first."
+                    });
+
+            });
+
+
+    </script>
+{% endblock %}

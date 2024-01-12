@@ -3,7 +3,7 @@ views.py file for llm app.
 
 Author(s): Benjamin Klieger
 Version: 1.1.0
-Date: 2024-01-07
+Date: 2024-01-11
 """
 
 #------- [Import Libraries] -------#
@@ -62,3 +62,23 @@ class LlmView(APIView):
         except SessionTranscript.DoesNotExist:
             # return error
             return Response({"error": "session_transcript_id is invalid"}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@method_decorator(login_required, name='dispatch')
+class LlmOnlyView(APIView):
+    def get(self, request):
+        #get SessionTranscriptID from request
+        transcript = request.GET.get('transcript')
+        if transcript is None: # if session_transcript_id is not provided
+            return Response({"error": "transcript is required"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        prompt_for_llm = request.GET.get('prompt_for_llm')
+        if prompt_for_llm is None or prompt_for_llm=="": # if prompt_for_llm is not provided or is empty
+            return Response({"error": "prompt_for_llm is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # get response from LLM, formatting the instructions and transcript
+        prompt_for_llm = "Transcript: \n\n"+transcript+"\n--------------\n\nInstructions: "+prompt_for_llm
+        response_from_llm = get_llm_feedback(prompt_for_llm)
+        
+        # return response from LLM
+        return Response({"prompt_for_llm":prompt_for_llm,"response_from_llm": response_from_llm})

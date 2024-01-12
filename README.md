@@ -40,6 +40,10 @@ If at any time your connection has disconnected from the transcription service, 
 
 ![Llm Screenshot](/assets/img/warning.png)
 
+Alternatively, you can upload or copy and paste a transcript instead of recording it live. Visit "/upload" for the following page.
+
+![Llm Screenshot](/assets/img/upload-dashboard.png)
+
 
 ## Description of Stack
 
@@ -59,7 +63,7 @@ v1.0.0 - October 26th, 2023. First open-source stable version.
 
 v1.0.1 - January 6th, 2024. Full replacement of Middlesight with OpenAI 
 
-v1.1.0 - January 7th, 2024. Ability to customize Bruno persona and prompt
+v1.1.0 - January 11th, 2024. Ability to customize Bruno persona and prompt, upload and edit custom transcript
 
 
 ## License
