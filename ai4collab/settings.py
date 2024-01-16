@@ -171,7 +171,7 @@ Set CSRF_TRUSTED_ORIGINS based upon ALLOWED_HOSTS. Can change in the future.
 
 # Hard coded, can be changed later
 if DEPLOYMENT != 'local':
-    CSRF_TRUSTED_ORIGINS=["https://ai4collab.up.railway.app", "https://www.ai4collab.up.railway.app","https://localhost:8080"]
+    CSRF_TRUSTED_ORIGINS=["https://bruno.up.railway.app", "https://www.bruno.up.railway.app","https://localhost:8080"]
 
 
 """
