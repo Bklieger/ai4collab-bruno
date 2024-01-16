@@ -4,8 +4,8 @@ command that will allow the user to check with deployment
 environment they are currently using.
 
 Author(s): Benjamin Klieger
-Version: 1.0.0
-Date: 2023-10-26
+Version: 1.1.0
+Date: 2024-01-11
 """
 
 # Import required libraries

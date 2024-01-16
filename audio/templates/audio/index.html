@@ -1,254 +1,89 @@
 <!-- 
     index.html for audio app. 
-    Shows dashboard for Bruno.
+    Dashboard for Bruno.
 
     Author(s): Benjamin Klieger
-    Version: 1.0.0
-    Date: 2023-10-26
+    Version: 1.1.0
+    Date: 2024-01-11
 -->
 
-<!DOCTYPE html>
-<html>
+{% extends 'audio/base.html' %}
 
-<head>
-    <title>Chat</title>
-    <!-- Include the Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
-    <style>
-        /* Hide the boxes when they're empty */
-        .content-box:empty {
-            display: none;
-        }
-    </style>
-</head>
+{% block recording_button %}
+<!-- Record button -->
+<button id="record-button"
+    class="w-8 h-8 rounded-full flex items-center justify-center fas fa-record-vinyl"
+    onclick="toggleRecording()"></button>
 
-<!-- Body -->
-<body class="bg-gray-100 font-sans antialiased text-gray-900">
+<!-- Record and pause text -->
+<span class="record-text" style="margin-top:5px;">Record</span>
+<span class="pause-text" style="display:none;margin-top:5px;">Pause</span>
 
-    <!-- Main Container -->
-    <div class="container mx-auto px-4">
-        <div class="flex items-center justify-between">
+<!-- Banner for connecting to server message-->
+<span id="banner-style" class="banner text-center text-base">
+<p id="status" style="font-weight:600;padding:5px;">Connecting to server...</p>
+</span>
+{% endblock %}
 
-            <!-- Bruno header -->
-            <h1 class="text-4xl font-bold my-8 text-yellow-600">Bruno</h1>
 
-            <div class="flex flex-col items-center mt-4">
+{% block transcript %}
+<!-- Transcript -->
+<div class="p-4 flex-grow text-base" id="transcript-div">
+    Transcript
+    <div id="transcript"
+        class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box"
+        style="max-height: 500px; min-height:275px;">Say something to begin.</div>
+</div>
+{% endblock %}
 
-                <!-- Record button -->
-                <button id="record-button"
-                    class="w-8 h-8 rounded-full flex items-center justify-center fas fa-record-vinyl"
-                    onclick="toggleRecording()"></button>
 
-                <!-- Record and pause text -->
-                <span class="record-text" style="margin-top:5px;">Record</span>
-                <span class="pause-text" style="display:none;margin-top:5px;">Pause</span>
+{% block instructions %}
+<div class="p-4 h-full text-base">
+    Instructions
+    <div id=""
+        class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box"
+        style="max-height: 663px;min-height:663px;">
 
-                <!-- Banner for connecting to server message-->
-                <span id="banner-style" class="banner text-center text-base">
-                    <p id="status" style="font-weight:600;padding:5px;">Connecting to server...</p>
-                </span>
-                
-                <!-- Overlay for offline Status -->
-                <div id="overlay"
-                    style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5);z-index:100;">
-                </div>
+        1. Provide context about your conversation in the field below.<br /><br />
+        <textarea style="resize: none;" id="customContext"
+            placeholder="What is your conversation about?" rows="4"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm"></textarea>
+        <br /><br />
 
-            </div>
+        2. Click the "record" button at the top.<br /><br />
 
-            <div style="width:100px;"></div>
+        3. Start talking about your project.<br /><br />
+
+        4. Ask Bruno questions to get feedback:<br /><br />
+        <div style="font-size:14px;font-style:italic; padding-left:3px;">
+            How evenly distributed is our speaking time?<br />
+            Are we actively engaging with each other's ideas?<br />
+            Are there any instances of a speaker being <br />excluded from the conversation?<br />
+            How much of the conversation has been on topic?<br />
+            How well have we collaborated as a team?<br />
+            Has off topic conversation allowed us to better work together?<br />
         </div>
+        <br />
 
+        5. Pause Bruno and edit the transcript as needed to improve accuracy.<br />
 
-        <!-- Settings gear at bottom right of page -->
-        <div id="settings-gear" class="settings-gear"
-            style="position: fixed; bottom: 20px; right: 20px; cursor: pointer;">
-            ⚙️
+        <!-- Sign out option -->
+        <div style="width:100%; align-items: right;">
+            <br>
+            You are signed in. <a href="/accounts/logout"
+                style="text-decoration: underline;">Logout</a>
         </div>
-
-        <!-- Settings panel -->
-        <div id="settings-panel" class="settings-panel hidden"
-            style="position: fixed; bottom: 70px; right: 20px; background-color: white; border: 1px solid #ccc; padding: 20px; border-radius: 5px;">
-            <button id="toggleButton" class="toggle-button">Hide Transcript</button>
-        </div>
-
-
-        <!-- Script for toggling settings gear and transcript -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var settingsGear = document.getElementById('settings-gear');
-                var settingsPanel = document.getElementById('settings-panel');
-                var toggleButton = document.getElementById('toggleButton');
-                var transcript = document.getElementById('transcript-div');
-
-                // Show/hide settings panel when gear icon is clicked
-                settingsGear.addEventListener('click', function () {
-                    if (settingsPanel.classList.contains('hidden')) {
-                        settingsPanel.classList.remove('hidden');
-                    } else {
-                        settingsPanel.classList.add('hidden');
-                    }
-                });
-
-                // Show/hide transcript when button in settings panel is clicked
-                toggleButton.addEventListener('click', function () {
-                    if (transcript.classList.contains('hidden')) {
-                        transcript.classList.remove('hidden');
-                        toggleButton.textContent = 'Hide Transcript';
-                    } else {
-                        transcript.classList.add('hidden');
-                        toggleButton.textContent = 'Show Transcript';
-                    }
-                });
-            });
-        </script>
-
-
-        <!-- Main content -->
-        <div class="flex flex-wrap justify-start items-start">
-            <div class="flex flex-col md:flex-row w-full">
-                <div class="md:flex md:flex-col md:w-2/3 p-1">
-
-                    <!-- Transcript -->
-                    <div class="p-4 flex-grow text-base" id="transcript-div">
-                        Transcript
-                        <div id="transcript"
-                            class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box"
-                            style="max-height: 500px; min-height:275px;">Say something to begin.</div>
-                    </div>
-
-                    <!-- Prompt and response -->
-                    <div class="p-4 flex-grow text-base">
-                        Prompt + Response
-                        <div class="my-4" style="padding-bottom:50px;">
-                            <div class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box"
-                                style="max-height: 500px; min-height:275px;">
-                                <div id="chatContents"
-                                    style="height:210px;margin-bottom:10px;overflow-y:scroll;box-sizing: border-box;margin-top:3px;">
-                                </div>
-
-                                <!-- Chatbox for conversing with Bruno -->
-                                <div><textarea style="resize: none;" id="customPrompt" placeholder="Send a prompt"
-                                        rows="1"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm"
-                                        style="border-width:2px;"></textarea></div>
-
-                            </div>
-
-                            <!-- Button for sending prompt to Bruno -->
-                            <div class="flex justify-end items-center mt-2">
-
-                                <!-- Button for restarting session -->
-                                <button id="restartButton"
-                                    style="color: #075185; border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; margin-right:0px; transition-duration: 500ms; cursor: pointer; width: 175px; text-decoration: underline;"
-                                    class="flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5"
-                                        style="margin-right:5px;">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                                    </svg>
-                                    Reset Session</button>
-
-                                <!-- Button for asking Bruno a query -->
-                                <button id="askLLMButton"
-                                    style="background-color: #075185; color: white;border-radius: 0.375rem; padding: 0.5rem 1rem; margin-top: 0.5rem; transition-duration: 500ms; cursor: pointer; width: 175px;">Ask
-                                    Bruno</button>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-
-
-                <!-- Instructions -->
-                <div class="md:w-1/3 p-1">
-                    <div class="p-4 h-full text-base">
-                        Instructions
-                        <div id=""
-                            class="border border-gray-300 bg-white rounded-lg p-4 my-4 shadow-lg overflow-auto content-box"
-                            style="max-height: 663px;min-height:663px;">
-
-                            1. Provide context about your conversation in the field below.<br /><br />
-                            <textarea style="resize: none;" id="customContext"
-                                placeholder="What is your conversation about?" rows="4"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-cyan-500 focus:border-indigo-500 sm:text-sm"></textarea>
-                            <br /><br />
-
-                            2. Click the "record" button at the top.<br /><br />
-
-                            3. Start talking about your project.<br /><br />
-
-                            4. Ask Bruno questions to get feedback:<br /><br />
-                            <div style="font-size:14px;font-style:italic; padding-left:3px;">
-                                How evenly distributed is our speaking time?<br />
-                                Are we actively engaging with each other's ideas?<br />
-                                Are there any instances of a speaker being <br />excluded from the conversation?<br />
-                                How much of the conversation has been on topic?<br />
-                                How well have we collaborated as a team?<br />
-                                Has off topic conversation allowed us to better work together?<br />
-                            </div>
-                            <br />
-
-                            5. Pause Bruno and edit the transcript as needed to improve accuracy.<br />
-
-                            <!-- Sign out option -->
-                            <div style="width:100%; align-items: right;">
-                                <br>
-                                You are signed in. <a href="/accounts/logout"
-                                    style="text-decoration: underline;">Logout</a>
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <!-- CSS styles for the page -->
-        <style>
-            .fas {
-                color: rgb(239 68 68);
-                font-size: 2rem;
-            }
-
-            .banner {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background-color: rgb(219, 219, 219);
-                padding: 0px 0;
-                text-align: center;
-                z-index: 1000;
-            }
-
-            .hidden {
-                display: none;
-            }
-        
-            .settings-gear {
-                font-size: 30px;
-            }
-        
-            .toggle-button {
-                padding: 8px 16px;
-                cursor: pointer;
-                background-color: #f0f0f0;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-            }
-        </style>
-
 
     </div>
 
+</div>
+{% endblock %}
 
+
+
+
+{% block main_javascript %}
     <!-- Javascript for the transcription and Bruno functionality -->
     <script>
 
@@ -265,7 +100,6 @@
                 recordButton.classList.add("fa-record-vinyl");
             }
         }
-
 
         // Main script
         navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
@@ -434,9 +268,10 @@
                                 const session_transcript_id = sessiondata.session_id_token;
                                 const context = document.getElementById('customContext').value;
 
-                                // Custom prompt for Bruno. Can be modified from this file.
-                                const persona = "You are Bruno, an AI coach that gives feedback on the conversation in the transcript above. The context provided by the student is as follows (it may be empty): " + context;
-                                const fullPrompt = persona + "\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n" + conversationHistory + "\nStudent: " + prompt + "\nNow respond as Bruno.";
+
+                                const persona = document.getElementById('persona').value + " The context provided by the student is as follows (it may be empty): " + context;
+                                const fullPrompt = persona + "\n(1) ONLY RESPOND TO QUESTIONS ABOUT THE STUDENT'S COLLABORATIVE PROCESS. (2) YOU HAVE THE TRANSCRIPT ABOVE, DO NOT ASK FOR IT.\n--------------\n\nConversation History: \n" + conversationHistory + "\nStudent: " + prompt + "\n"+document.getElementById('customPromptSettings').value;
+
 
                                 // Send flush signal first.
                                 const command = {
@@ -495,11 +330,4 @@
                 });
         })
     </script>
-
-</body>
-
-</html>
-
-
-
-
+{% endblock %}

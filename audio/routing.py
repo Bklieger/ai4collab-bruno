@@ -2,8 +2,8 @@
 routing.py file for audio app. Routing websocket connections to consumers.
 
 Author(s): Benjamin Klieger
-Version: 1.0.0
-Date: 2023-10-26
+Version: 1.1.0
+Date: 2024-01-11
 """
 
 # Import Django Modules

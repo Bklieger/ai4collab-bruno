@@ -2,8 +2,8 @@
 settings.py file for ai4collab app.
 
 Author(s): Benjamin Klieger
-Version: 1.0.0
-Date: 2023-10-26
+Version: 1.1.0
+Date: 2024-01-11
 """
 
 # ------------- [Import Libraries] -------------
@@ -42,9 +42,7 @@ The following environment variables are used as API keys for 3rd party applicati
 Requirements:
     - DEEPGRAM_API_KEY: A string representing the Deepgram API key.
         [Environment variable in: local, development, production]
-    - MIDDLESIGHT_API_KEY: A string representing the Middlesight API key. [Or OPENAI_API_KEY]
-        [Environment variable in: local, development, production]
-    - OPENAI_API_KEY: A string representing the OpenAI API key. [Or MIDDLESIGHT_API_KEY]
+    - OPENAI_API_KEY: A string representing the OpenAI API key.
         [Environment variable in: local, development, production]
 """
 
@@ -60,34 +58,16 @@ elif len(DEEPGRAM_API_KEY)<3:
     critical_warnings_exist = True
 
 
-# Middlesight API key or OpenAI API key
+# OpenAI API key
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 if OPENAI_API_KEY==None:
+    running_deployment_transcript+= red_critical(f'[Critical] OPENAI_API_KEY environment variable not set. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+    critical_warnings_exist = True
 
-    MIDDLESIGHT_API_KEY = os.environ.get("MIDDLESIGHT_API_KEY")
-
-    if MIDDLESIGHT_API_KEY==None:
-        running_deployment_transcript+= red_critical(f'[Critical] MIDDLESIGHT_API_KEY environment variable not set. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
-        critical_warnings_exist = True
-
-    elif len(MIDDLESIGHT_API_KEY)<3:
-        running_deployment_transcript+= red_critical(f'[Critical] MIDDLESIGHT_API_KEY environment variable is invalid (<3 chars). (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
-        critical_warnings_exist = True
-
-    # Print notice of using Middlesight instead of OpenAI.
-    print(green_success(f'Using Middlesight proxy instead of OpenAI directly.'))
-
-else:
-    MIDDLESIGHT_API_KEY = None
-
-    if OPENAI_API_KEY==None:
-        running_deployment_transcript+= red_critical(f'[Critical] OPENAI_API_KEY environment variable not set. (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
-        critical_warnings_exist = True
-
-    elif len(OPENAI_API_KEY)<3:
-        running_deployment_transcript+= red_critical(f'[Critical] OPENAI_API_KEY environment variable is invalid (<3 chars). (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
-        critical_warnings_exist = True
+elif len(OPENAI_API_KEY)<3:
+    running_deployment_transcript+= red_critical(f'[Critical] OPENAI_API_KEY environment variable is invalid (<3 chars). (Line {inspect.currentframe().f_lineno} in {os.path.basename(__file__)})\n')
+    critical_warnings_exist = True
 
 
 # ------------- [Environment Variables for Django App] -------------
