@@ -35,7 +35,7 @@ def dashboard(request):
         url_to_use = "localhost:8000" # If hosting on different port, update this variable
         url_to_use = "ws://"+url_to_use
     else:
-        url_to_use = "ai4collab.up.railway.app" # If hosting on different url, update this variable
+        url_to_use = "bruno.up.railway.app" # If hosting on different url, update this variable
         url_to_use = "wss://"+url_to_use
     return render(request, 'audio/index.html', {'url_to_use': url_to_use})
 
