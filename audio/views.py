@@ -39,6 +39,18 @@ def dashboard(request):
         url_to_use = "wss://"+url_to_use
     return render(request, 'audio/index.html', {'url_to_use': url_to_use})
 
+# Login protected interface screen
+@login_required
+def activeDashboard(request):
+    # Determine URL to use depending on deployment
+    if DEPLOYMENT != "production":
+        url_to_use = "localhost:8000" # If hosting on different port, update this variable
+        url_to_use = "ws://"+url_to_use
+    else:
+        url_to_use = "ai4collab.up.railway.app" # If hosting on different url, update this variable
+        url_to_use = "wss://"+url_to_use
+    return render(request, 'audio/active.html', {'url_to_use': url_to_use})
+
 # Login protected interface screen with custom transcript index
 @login_required
 def customTranscriptDashboard(request):
